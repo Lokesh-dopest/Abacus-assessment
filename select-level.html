@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Level - Abacus Competition</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      background: linear-gradient(to bottom right, #1e3a8a, #3b82f6);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .level-btn {
+      padding: 18px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+      color: #475569;
+    }
+
+    .level-btn.enabled {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .level-btn.enabled:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .level-btn.disabled {
+      cursor: not-allowed;
+      background: #f8fafc;
+      color: #94a3b8;
+    }
+
+    .level-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .level-status {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      border-left: 4px solid #3b82f6;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px;
+      }
+      
+      .levels {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Abacus Practice Test</h1>
+    <p class="subtitle">Select a level to begin</p>
+  </div>
+
+  <div class="levels">
+    <button class="level-btn enabled" onclick="selectLevel(1)">
+      <span class="level-label">Level 1</span>
+      <span class="level-status">Available</span>
+    </button>
+    <button class="level-btn enabled" onclick="selectLevel(2)">
+      <span class="level-label">Level 2</span>
+      <span class="level-status">Available</span>
+    </button>
+    <button class="level-btn enabled" onclick="selectLevel(3)">
+      <span class="level-label">Level 3</span>
+      <span class="level-status">Available</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Level 4</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Level 5</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Level 6</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Level 7</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Level 8</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Vedic 1</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Vedic 2</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Vedic 3</span>
+      <span class="level-status">Locked</span>
+    </button>
+    <button class="level-btn disabled">
+      <span class="level-label">Vedic 4</span>
+      <span class="level-status">Locked</span>
+    </button>
+  </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script>
+function showNotification(message) {
+  const notif = document.getElementById('notification');
+  notif.textContent = message;
+  notif.classList.add('show');
+  setTimeout(() => {
+    notif.classList.remove('show');
+  }, 2000);
+}
+
+function selectLevel(level) {
+  // Clear old test data when starting fresh
+  localStorage.removeItem("questions");
+  localStorage.removeItem("answers");
+  localStorage.removeItem("timeLeft");
+  localStorage.setItem("selectedLevel", level);
+  showNotification('Loading Level ' + level + '...');
+  setTimeout(() => {
+    window.location.href = "level" + level + ".html";
+  }, 500);
+}
+</script>
+
+</body>
+</html>
