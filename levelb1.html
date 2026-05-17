@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginner 1 - Abacus Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --surface: #ffffff;
+            --border: #dce3ed;
+            --border-hover: #94a3b8;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --brand: #1e40af;
+            --brand-light: #2563eb;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --green-bg: #f0fdf4;
+            --red: #dc2626;
+            --red-bg: #fef2f2;
+            --amber: #d97706;
+            --amber-bg: #fffbeb;
+            --radius: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══ HEADER ═══ */
+        header {
+            position: sticky; top: 0; z-index: 100; background: var(--surface);
+            border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 16px; }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px; background: none;
+            border: 1px solid var(--border); color: var(--text-secondary);
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;
+            font-weight: 600; transition: 0.15s;
+        }
+        .back-btn:hover { background: var(--bg); border-color: var(--border-hover); }
+
+        .header-title { font-size: 14px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
+        .header-level { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .header-stat { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+        .header-stat strong { font-weight: 700; color: var(--text-primary); }
+        .timer-val { color: var(--red) !important; font-variant-numeric: tabular-nums; }
+        .divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+        /* ═══ CONTAINER ═══ */
+        .container { max-width: 820px; margin: 0 auto; padding: 24px 20px 60px; }
+
+        /* ═══ PROGRESS ═══ */
+        .progress-track {
+            height: 3px; background: var(--border); border-radius: 4px;
+            margin-bottom: 28px; overflow: hidden;
+        }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; border-radius: 4px; }
+
+        /* ═══ QUESTION CARD ═══ */
+        .q-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 20px 24px; margin-bottom: 12px; transition: border-color 0.15s;
+        }
+        .q-card:hover { border-color: var(--border-hover); }
+
+        .q-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+
+        .q-num {
+            width: 28px; height: 28px; border-radius: 6px; background: var(--bg); display: flex;
+            align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+            color: var(--text-secondary); flex-shrink: 0;
+        }
+
+        .q-expr {
+            font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700;
+            color: var(--text-primary); letter-spacing: 0.5px;
+        }
+
+        .opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+        .opt {
+            background: var(--surface); border: 1.5px solid var(--border); padding: 10px 8px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px;
+            color: var(--text-primary); text-align: center; transition: all 0.12s; user-select: none;
+        }
+        .opt:hover { background: var(--accent-light); border-color: var(--accent); }
+        .opt.selected { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+        /* ═══ PAGINATION ═══ */
+        .pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin: 32px 0; }
+
+        .pg-btn {
+            width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 700;
+            color: var(--text-secondary); transition: 0.15s;
+        }
+        .pg-btn:hover { border-color: var(--border-hover); }
+        .pg-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+        .pg-btn.touched { background: var(--green-bg); color: var(--green); border-color: #bbf7d0; }
+
+        /* ═══ SUBMIT ═══ */
+        .submit-btn {
+            display: block; width: 100%; max-width: 260px; margin: 0 auto; padding: 14px 24px;
+            background: var(--brand); color: #fff; border: none; border-radius: 10px; font-size: 14px;
+            font-weight: 700; cursor: pointer; letter-spacing: 0.2px; transition: 0.2s;
+        }
+        .submit-btn:hover { background: #1e3a8a; }
+
+        /* ═══ OVERLAY ═══ */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none;
+            align-items: center; justify-content: center; z-index: 500; padding: 20px; backdrop-filter: blur(4px);
+        }
+        .overlay.open { display: flex; }
+
+        .dialog { background: var(--surface); border-radius: 14px; width: 100%; animation: slideUp 0.25s ease; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ═══ BACK WARNING DIALOG ═══ */
+        .warn-dialog { max-width: 380px; padding: 28px 24px 24px; text-align: center; }
+        .warn-dialog .warn-icon {
+            width: 44px; height: 44px; border-radius: 50%; background: var(--red-bg); display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 16px;
+        }
+        .warn-dialog .warn-icon svg { width: 20px; height: 20px; color: var(--red); }
+        .warn-dialog h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .warn-dialog p  { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+        .warn-actions { display: flex; gap: 8px; }
+        .warn-actions button {
+            flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
+        }
+        .btn-cancel { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+        .btn-cancel:hover { background: var(--border); }
+        .btn-danger { background: var(--red); color: white; }
+        .btn-danger:hover { background: #b91c1c; }
+
+        /* ═══ RESULT DIALOG ═══ */
+        .result-dialog { max-width: 440px; overflow: hidden; }
+        .result-top { padding: 28px 28px 0; text-align: center; }
+        .result-top h2 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .result-top .sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+        .score-display { text-align: center; padding: 24px 0 16px; }
+        .score-big     { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .score-total   { font-size: 20px; font-weight: 600; color: var(--text-muted); }
+        .score-pct     { font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+        .result-bar-track { height: 4px; background: var(--border); margin: 0 28px; border-radius: 4px; overflow: hidden; }
+        .result-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+
+        .result-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border);
+            margin: 20px 28px 0; border-radius: 8px; overflow: hidden;
+        }
+        .rs-item { background: var(--surface); padding: 14px 8px; text-align: center; }
+        .rs-val  { font-size: 20px; font-weight: 800; line-height: 1.2; }
+        .rs-lbl  { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+        .grade-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.8px; text-transform: uppercase; margin-top: 12px;
+        }
+
+        .result-footer { display: flex; gap: 8px; padding: 20px 28px 24px; margin-top: 20px; }
+        .result-footer button {
+            flex: 1; padding: 11px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
+        }
+        .rf-secondary { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+        .rf-secondary:hover { background: var(--border); }
+        .rf-primary { background: var(--brand); color: #fff; }
+        .rf-primary:hover { background: #1e3a8a; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .opts { grid-template-columns: repeat(2, 1fr); }
+            .header-right { gap: 12px; }
+            .divider-dot { display: none; }
+            .header-stat { font-size: 12px; }
+            .q-expr { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <button class="back-btn" onclick="confirmBack()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+            </svg>
+            Back
+        </button>
+        <div>
+            <div class="header-title">Abacus Assessment</div>
+            <div class="header-level">Beginner 1</div>
+        </div>
+    </div>
+    <div class="header-right">
+        <span class="header-stat"><strong class="timer-val" id="timer">10:00</strong></span>
+        <span class="divider-dot"></span>
+        <span class="header-stat"><strong id="attempted">0</strong> / <span id="totalQs"></span></span>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <div id="questions"></div>
+    <div class="pagination" id="pagination"></div>
+
+    <button class="submit-btn" onclick="handleSubmission()">Submit Test</button>
+</div>
+
+<div class="overlay" id="backWarn">
+    <div class="dialog warn-dialog">
+        <div class="warn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+        </div>
+        <h3>Leave this test?</h3>
+        <p>All your answers and remaining time will be lost. You will need to restart from the beginning.</p>
+        <div class="warn-actions">
+            <button class="btn-cancel" onclick="closeBackWarn()">Continue Test</button>
+            <button class="btn-danger" onclick="goBack()">Leave</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="resultModal">
+    <div class="dialog result-dialog">
+        <div class="result-top">
+            <h2>Test Complete</h2>
+            <span class="sub">Beginner 1 Assessment</span>
+        </div>
+
+        <div class="score-display">
+            <span class="score-big" id="scoreNum">0</span><span class="score-total"> / <span id="resTotal"></span></span>
+            <div class="score-pct" id="scorePct">0%</div>
+            <div class="grade-badge" id="gradeBadge">-</div>
+        </div>
+
+        <div class="result-bar-track">
+            <div class="result-bar-fill" id="resultBar" style="width:0%"></div>
+        </div>
+
+        <div class="result-stats">
+            <div class="rs-item">
+                <div class="rs-val" id="rsCorrect" style="color:var(--green)">0</div>
+                <div class="rs-lbl">Correct</div>
+            </div>
+            <div class="rs-item">
+                <div class="rs-val" id="rsWrong" style="color:var(--red)">0</div>
+                <div class="rs-lbl">Wrong</div>
+            </div>
+            <div class="rs-item">
+                <div class="rs-val" id="rsSkipped" style="color:var(--amber)">0</div>
+                <div class="rs-lbl">Skipped</div>
+            </div>
+        </div>
+
+        <div class="result-footer">
+            <button class="rf-secondary" onclick="retakeTest()">Retake</button>
+            <button class="rf-primary" onclick="location.href='index.html'">Back to Dashboard</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Raw question data provided by user
+    const rawData = [
+        { q: "11+35+53-65-12", o: [33, 22, 34, 23] },
+        { q: "64-14+49-36-63", o: [0, 10, 9, 1] },
+        { q: "27+62-67+27-38", o: [22, 11, 12, 33] },
+        { q: "38+51-79+68+21", o: [98, 99, 89, 97] },
+        { q: "76-11-15+39-67", o: [33, 22, 23, 24] },
+        { q: "11-11+32+52+15", o: [99, 88, 98, 96] },
+        { q: "22+57-17+15+22", o: [88, 99, 89, 98] },
+        { q: "87-32-55+23+76", o: [89, 98, 99, 97] },
+        { q: "28+51-79+17+72", o: [99, 89, 88, 87] },
+        { q: "11+38+50-25-61", o: [14, 15, 13, 23] },
+        { q: "99-66-33", o: [0, 1, 10, 9] },
+        { q: "76-16+39", o: [89, 99, 97, 98] },
+        { q: "49-23-21", o: [6, 5, 4, 8] },
+        { q: "79+20-67", o: [23, 32, 33, 34] },
+        { q: "41+58-44", o: [45, 55, 56, 54] },
+        { q: "22+55-11", o: [56, 45, 66, 46] },
+        { q: "33+65-77", o: [31, 21, 23, 32] },
+        { q: "39+60-49", o: [60, 40, 50, 51] },
+        { q: "18+31+50", o: [89, 98, 99, 97] },
+        { q: "64+35-28", o: [61, 62, 71, 72] },
+        { q: "46+3+50-9", o: [89, 90, 91, 80] },
+        { q: "21+6+51-8", o: [60, 61, 70, 71] },
+        { q: "44+5+50-9", o: [89, 90, 91, 92] },
+        { q: "11+6+52-4", o: [70, 50, 60, 61] },
+        { q: "86+3+10-2", o: [87, 97, 98, 86] },
+        { q: "51+7+21-5", o: [84, 64, 74, 75] },
+        { q: "18-3+30-5", o: [50, 60, 40, 41] },
+        { q: "99-7-62+9", o: [49, 39, 38, 37] },
+        { q: "48-7-11+2", o: [23, 32, 33, 31] },
+        { q: "33-3+59-2", o: [87, 97, 86, 85] },
+        { q: "9-2-2+4-5-4", o: [0, 1, 2, 9] },
+        { q: "2+5-6+3+5-6", o: [4, 3, 2, 5] },
+        { q: "6+3-8-1+2+5", o: [7, 6, 5, 4] },
+        { q: "1+5+3-6-3+1", o: [2, 3, 1, 4] },
+        { q: "8-7+5-6+4+5", o: [8, 7, 9, 6] },
+        { q: "2+1+5-6+2-3", o: [2, 3, 1, 4] },
+        { q: "2+2-3+6+2-9", o: [2, 3, 0, 4] },
+        { q: "7+2-8+5+2-5", o: [4, 5, 3, 2] },
+        { q: "4-2+7-6+5-8", o: [1, 2, 3, 0] },
+        { q: "9-8+7-6+5-7", o: [0, 2, 3, 1] },
+        { q: "11+21-33", o: [2, 3, 0, 1] },
+        { q: "22+22-11", o: [43, 23, 33, 32] },
+        { q: "49-16+51", o: [74, 94, 84, 85] },
+        { q: "33+66-72", o: [26, 25, 27, 37] },
+        { q: "16+60-76", o: [1, 0, 10, 9] },
+        { q: "98-55+56", o: [89, 98, 99, 97] },
+        { q: "35+11-25", o: [22, 21, 31, 32] },
+        { q: "51+15-66", o: [10, 11, 0, 3] },
+        { q: "22+25+52", o: [89, 98, 99, 97] },
+        { q: "28+21-38", o: [12, 11, 21, 13] },
+        { q: "26-11+64", o: [89, 79, 99, 78] },
+        { q: "55+44-24", o: [76, 74, 75, 85] },
+        { q: "67+32-25", o: [84, 74, 75, 76] },
+        { q: "84-50+15", o: [39, 59, 49, 48] },
+        { q: "65+32-77", o: [30, 20, 21, 22] },
+        { q: "82-22+39", o: [89, 99, 98, 97] },
+        { q: "98-6-62", o: [30, 20, 40, 21] },
+        { q: "52-2+49", o: [89, 99, 98, 97] },
+        { q: "25+4-19", o: [20, 30, 10, 11] },
+        { q: "25+2+52", o: [89, 99, 79, 78] },
+        { q: "40+8-25", o: [23, 24, 25, 32] },
+        { q: "41-1+59", o: [89, 99, 97, 98] },
+        { q: "88-7-11", o: [69, 70, 80, 71] },
+        { q: "49-9+51", o: [91, 90, 89, 88] },
+        { q: "96+3-68", o: [32, 31, 21, 41] },
+        { q: "64+5-69", o: [10, 0, 1, 2] },
+        { q: "99-4+2-6-1", o: [80, 90, 91, 93] },
+        { q: "46+2-8+9-7", o: [32, 43, 42, 41] },
+        { q: "56+3-6+5-6", o: [32, 42, 43, 52] },
+        { q: "22+6+1-8-1", o: [30, 21, 22, 20] },
+        { q: "86+2-5+6-3", o: [86, 96, 95, 85] },
+        { q: "45+2-6+3+5", o: [59, 39, 48, 49] },
+        { q: "74-2-2+9-9", o: [70, 80, 71, 72] },
+        { q: "36+2-8+1+5", o: [36, 46, 35, 34] },
+        { q: "44-1+5-7+8", o: [49, 39, 29, 48] },
+        { q: "88-7+3-4+2", o: [82, 72, 83, 84] },
+        { q: "55+1+2-6+2", o: [54, 55, 56, 44] }
+    ];
+
+    const TOTAL = rawData.length;
+    const PER_PAGE = 25;
+    const PAGES = Math.ceil(TOTAL / PER_PAGE);
+
+    // Initialize UI Elements
+    document.getElementById('totalQs').textContent = TOTAL;
+    document.getElementById('resTotal').textContent = TOTAL;
+
+    // Helper: Safely evaluate a math string
+    function evaluateMath(str) {
+        return Function(`'use strict'; return (${str})`)();
+    }
+
+    // Prepare questions with shuffled options & correct answer tracking
+    let questions = JSON.parse(sessionStorage.getItem('b1_questions'));
+    if (!questions) {
+        questions = rawData.map(item => {
+            const correctAns = evaluateMath(item.q);
+            return {
+                text: item.q,
+                options: item.o.sort(() => Math.random() - 0.5),
+                correct: correctAns
+            };
+        });
+        
+        // Shuffle the order of the questions themselves
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+        
+        sessionStorage.setItem('b1_questions', JSON.stringify(questions));
+    }
+
+    let answers = JSON.parse(sessionStorage.getItem('b1_answers')) || {};
+    let timeLeft = parseInt(sessionStorage.getItem('b1_time')) || 600;
+    let currentPage = 1;
+    let timerInterval;
+
+    /* ── Grade Bands ── */
+    const GRADES = [
+        { min: 95, grade: 'A+', color: '#166534', bg: '#dcfce7', bar: '#16a34a' },
+        { min: 85, grade: 'A',  color: '#155e75', bg: '#cffafe', bar: '#0891b2' },
+        { min: 70, grade: 'B',  color: '#1e40af', bg: '#dbeafe', bar: '#3b82f6' },
+        { min: 55, grade: 'C',  color: '#92400e', bg: '#fef3c7', bar: '#d97706' },
+        { min: 40, grade: 'D',  color: '#9a3412', bg: '#ffedd5', bar: '#ea580c' },
+        { min: 0,  grade: 'F',  color: '#991b1b', bg: '#fee2e2', bar: '#dc2626' }
+    ];
+    const getGrade = pct => GRADES.find(g => pct >= g.min);
+
+    /* ── Render ── */
+    function renderPage(page) {
+        currentPage = page;
+        const el = document.getElementById('questions');
+        el.innerHTML = '';
+        const start = (page - 1) * PER_PAGE;
+
+        questions.slice(start, start + PER_PAGE).forEach((q, i) => {
+            const idx = start + i;
+            
+            // Format text nicely with spaces around operators
+            let displayQ = q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ');
+
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            card.innerHTML = `
+                <div class="q-top">
+                    <div class="q-num">${idx + 1}</div>
+                    <div class="q-expr">${displayQ} = ?</div>
+                </div>
+                <div class="opts">
+                    ${q.options.map(o => `
+                        <button class="opt${answers[idx] === o ? ' selected' : ''}"
+                                onclick="pick(${idx},${o})">${o}</button>
+                    `).join('')}
+                </div>`;
+            el.appendChild(card);
+        });
+
+        renderPagination();
+        updateStats();
+    }
+
+    function renderPagination() {
+        const nav = document.getElementById('pagination');
+        nav.innerHTML = '';
+        for (let i = 1; i <= PAGES; i++) {
+            const s = (i - 1) * PER_PAGE;
+            const done = questions.slice(s, s + PER_PAGE).some((_, j) => answers[s + j] != null);
+            const btn = document.createElement('button');
+            btn.className = `pg-btn${i === currentPage ? ' active' : ''}${done ? ' touched' : ''}`;
+            btn.textContent = i;
+            btn.onclick = () => { renderPage(i); scrollTo({ top: 0, behavior: 'smooth' }); };
+            nav.appendChild(btn);
+        }
+    }
+
+    function pick(idx, val) {
+        answers[idx] = val;
+        sessionStorage.setItem('b1_answers', JSON.stringify(answers));
+        renderPage(currentPage);
+    }
+
+    function updateStats() {
+        const n = Object.keys(answers).length;
+        document.getElementById('attempted').textContent = n;
+        document.getElementById('progressBar').style.width = (n / TOTAL * 100) + '%';
+    }
+
+    /* ── Timer ── */
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            sessionStorage.setItem('b1_time', timeLeft);
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            document.getElementById('timer').textContent = `${m}:${s < 10 ? '0' + s : s}`;
+            if (timeLeft <= 0) handleSubmission();
+        }, 1000);
+    }
+
+    /* ── Submit ── */
+    function handleSubmission() {
+        clearInterval(timerInterval);
+
+        let correct = 0;
+        questions.forEach((q, i) => { if (answers[i] === q.correct) correct++; });
+
+        const attempted = Object.keys(answers).length;
+        const wrong     = attempted - correct;
+        const skipped   = TOTAL - attempted;
+        const pct       = Math.round((correct / TOTAL) * 100);
+        const band      = getGrade(pct);
+
+        document.getElementById('scoreNum').textContent       = correct;
+        document.getElementById('scorePct').textContent       = pct + '%';
+        document.getElementById('scorePct').style.color       = band.color;
+
+        const badge = document.getElementById('gradeBadge');
+        badge.textContent       = band.grade;
+        badge.style.background  = band.bg;
+        badge.style.color       = band.color;
+
+        const bar = document.getElementById('resultBar');
+        bar.style.background = band.bar;
+        setTimeout(() => { bar.style.width = pct + '%'; }, 50);
+
+        document.getElementById('rsCorrect').textContent = correct;
+        document.getElementById('rsWrong').textContent   = wrong;
+        document.getElementById('rsSkipped').textContent = skipped;
+
+        document.getElementById('resultModal').classList.add('open');
+        sessionStorage.removeItem('b1_questions');
+        sessionStorage.removeItem('b1_answers');
+        sessionStorage.removeItem('b1_time');
+    }
+
+    /* ── Back Warning ── */
+    function confirmBack() { document.getElementById('backWarn').classList.add('open'); }
+    function closeBackWarn() { document.getElementById('backWarn').classList.remove('open'); }
+    function goBack() {
+        sessionStorage.removeItem('b1_questions');
+        sessionStorage.removeItem('b1_answers');
+        sessionStorage.removeItem('b1_time');
+        window.location.href = 'index.html';
+    }
+    function retakeTest() {
+        sessionStorage.removeItem('b1_questions');
+        sessionStorage.removeItem('b1_answers');
+        sessionStorage.removeItem('b1_time');
+        location.reload();
+    }
+
+    /* ── Init ── */
+    const im = Math.floor(timeLeft / 60), is = timeLeft % 60;
+    document.getElementById('timer').textContent = `${im}:${is < 10 ? '0' + is : is}`;
+    renderPage(1);
+    startTimer();
+</script>
+</body>
+</html>

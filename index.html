@@ -3,378 +3,476 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Level - Kidz Brain Academy</title>
+    <title>Dashboard - Kidz Brain Academy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f8fafc;
+            /* SaaS Professional Color Palette */
+            --bg-main: #f8fafc;
             --surface: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border: #e2e8f0;
+            --border-light: #e2e8f0;
+            --border-hover: #cbd5e1;
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --success-bg: #dcfce7;
+            --primary-light: #eff6ff;
+            
+            --success-bg: #f0fdf4;
             --success-text: #166534;
+            --success-border: #bbf7d0;
+            
             --locked-bg: #f1f5f9;
-            --locked-text: #64748b;
-            --red: #dc2626;
+            --locked-text: #94a3b8;
+            --locked-border: #e2e8f0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── TOP NAVBAR ─── */
+        .navbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 24px;
+            height: 64px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* ─── LOGO & HEADER ─── */
-        .app-logo {
-            width: 120px;
-            height: 120px;
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             object-fit: cover;
-            border-radius: 50%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            margin-bottom: 24px;
-            animation: fadeDown 0.6s ease-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .header {
-            text-align: center;
+        .nav-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+        }
+
+        /* ─── MAIN DASHBOARD CONTAINER ─── */
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .page-header {
             margin-bottom: 40px;
-            max-width: 600px;
-            animation: fadeDown 0.6s ease-out;
         }
 
-        .header h1 {
-            font-size: 32px;
+        .page-header h1 {
+            font-size: 28px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
+            color: var(--text-main);
         }
 
-        .header p {
-            font-size: 16px;
-            color: var(--text-secondary);
+        .page-header p {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 600px;
             line-height: 1.6;
         }
 
-        /* ─── AUTHENTICATION SECTION ─── */
-        .auth-section {
-            background: var(--surface);
-            padding: 40px 32px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            animation: fadeUp 0.6s ease-out;
-            display: none; /* Controlled by JS */
-            flex-direction: column;
-        }
-
-        .auth-section h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-
-        .auth-section p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .auth-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 15px;
-            margin-bottom: 16px;
-            transition: all 0.2s ease;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .auth-input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .auth-error {
-            color: var(--red);
+        /* ─── CATEGORY SECTIONS ─── */
+        .section-title {
             font-size: 13px;
-            margin-top: 12px;
-            font-weight: 500;
-            min-height: 20px;
-        }
-
-        /* ─── GRID LAYOUT ─── */
-        .levels-section {
-            display: none; /* Controlled by JS */
-            width: 100%;
-            max-width: 1000px;
-            animation: fadeUp 0.6s ease-out;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin: 40px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
         }
 
         .levels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
         }
 
-        /* ─── LEVEL CARDS ─── */
+        /* ─── SAAS CARD DESIGN ─── */
         .card {
             background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
-        .card-content { flex: 1; text-align: left; }
-        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .card-content { 
+            flex: 1; 
+        }
+
+        .card-title { 
+            font-size: 15px; 
+            font-weight: 600; 
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
         .badge {
-            display: inline-block; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            padding: 4px 10px; border-radius: 6px;
+            display: inline-block; 
+            font-size: 11px; 
+            font-weight: 600;
+            padding: 2px 8px; 
+            border-radius: 999px; /* Pill shape */
+            letter-spacing: 0.3px;
+        }
+
+        .card-action {
+            color: var(--border-hover);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
         }
 
         /* Available State */
-        .card.available { cursor: pointer; }
-        .card.available .card-icon { background: #eff6ff; color: var(--primary); }
-        .card.available .badge { background: var(--success-bg); color: var(--success-text); }
+        .card.available { 
+            cursor: pointer; 
+        }
+        
+        .card.available .card-icon { 
+            background: var(--primary-light); 
+            color: var(--primary); 
+        }
+        
+        .card.available .badge { 
+            background: var(--success-bg); 
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+        }
         
         .card.available:hover {
             border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
         }
-        .card.available:hover .card-icon {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.05);
+
+        .card.available:hover .card-action {
+            color: var(--primary);
+            transform: translateX(4px);
         }
 
         /* Locked State */
-        .card.locked { cursor: not-allowed; background: #fafafa; opacity: 0.7; }
-        .card.locked .card-icon { background: var(--locked-bg); color: var(--locked-text); }
-        .card.locked .badge { background: var(--locked-bg); color: var(--locked-text); border: 1px solid var(--border); }
+        .card.locked { 
+            cursor: not-allowed; 
+            background: var(--bg-main); 
+        }
+        
+        .card.locked .card-icon { 
+            background: var(--locked-bg); 
+            color: var(--locked-text); 
+        }
+        
+        .card.locked .badge { 
+            background: var(--locked-bg); 
+            color: var(--locked-text); 
+            border: 1px solid var(--locked-border); 
+        }
+
+        .card.locked .card-action {
+            display: none;
+        }
 
         /* ─── NOTIFICATION ─── */
         .notification {
-            position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1e293b; color: white; padding: 16px 32px;
-            border-radius: 12px; font-weight: 600; font-size: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000; display: flex; align-items: center; gap: 12px;
+            position: fixed; 
+            bottom: 32px; 
+            right: 32px;
+            background: #1e293b; 
+            color: white; 
+            padding: 14px 24px;
+            border-radius: 8px; 
+            font-weight: 500; 
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
         }
-        .notification.show { transform: translateX(-50%) translateY(0); }
+        .notification.show { 
+            transform: translateY(0); 
+            opacity: 1;
+        }
         .spinner { animation: spin 1s linear infinite; }
 
         /* ─── ANIMATIONS ─── */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Responsive Adjustments */
+        /* Responsive */
         @media (max-width: 600px) {
-            .app-logo { width: 90px; height: 90px; }
-            .header h1 { font-size: 26px; }
-            .auth-section { padding: 32px 20px; }
+            .container { padding: 32px 16px 80px; }
+            .page-header h1 { font-size: 24px; }
+            .levels-grid { grid-template-columns: 1fr; }
+            .notification { left: 16px; right: 16px; bottom: 24px; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <img src="app.png" alt="Kidz Brain Academy Logo" class="app-logo">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="app.png" alt="Kidz Brain Academy Logo" class="nav-logo">
+            <span class="nav-title">Kidz Brain Academy</span>
+        </div>
+    </nav>
 
-    <div class="header">
-        <h1>Abacus Assessment</h1>
-        <p>Master your mental math skills step by step.</p>
-    </div>
+    <div class="container">
+        
+        <header class="page-header">
+            <h1>Abacus Assessment Dashboard</h1>
+            <p>Select a module below to begin your timed practice session. Track your speed and accuracy to master mental mathematics.</p>
+        </header>
 
-    <div class="auth-section" id="authSection">
-        <h2>Restricted Access</h2>
-        <p>Please enter the access password to continue to the assessment dashboard.</p>
-        <input type="password" id="passwordInput" class="auth-input" placeholder="Enter password" onkeypress="handleEnter(event)">
-        <button onclick="verifyPassword()" class="btn-primary">Unlock Access</button>
-        <p id="authError" class="auth-error"></p>
-    </div>
-
-    <div class="levels-section" id="levelsSection">
+        <h2 class="section-title">Beginner Curriculum</h2>
         <div class="levels-grid">
             
+            <div class="card available" onclick="selectLevel('b1')">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Beginner Level 1</div>
+                    <div class="badge">Available</div>
+                </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
+            </div>
+
+            <div class="card available" onclick="selectLevel('b2')">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Beginner Level 2</div>
+                    <div class="badge">Available</div>
+                </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
+            </div>
+
+            <div class="card available" onclick="selectLevel('b3')">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Beginner Level 3</div>
+                    <div class="badge">Available</div>
+                </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">Standard Curriculum</h2>
+        <div class="levels-grid">
+
             <div class="card available" onclick="selectLevel(1)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 1</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
             <div class="card available" onclick="selectLevel(2)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 2</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
             <div class="card available" onclick="selectLevel(3)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 3</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
             <div class="card available" onclick="selectLevel(4)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 4</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
             <div class="card available" onclick="selectLevel(5)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 5</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
             <div class="card available" onclick="selectLevel(6)">
                 <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 6</div>
                     <div class="badge">Available</div>
                 </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
             </div>
 
-            <div class="card locked">
+            <div class="card available" onclick="selectLevel(7)">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Level 7</div>
-                    <div class="badge">Locked</div>
+                    <div class="badge">Available</div>
+                </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                 </div>
             </div>
 
-            <div class="card locked">
+            <div class="card available" onclick="selectLevel(8)">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Level 8</div>
-                    <div class="badge">Locked</div>
+                    <div class="card-title">Level GM</div>
+                    <div class="badge">Available</div>
+                </div>
+                <div class="card-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                 </div>
             </div>
 
+        </div>
+
+        <h2 class="section-title">Vedic Mathematics</h2>
+        <div class="levels-grid">
+
             <div class="card locked">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Vedic 1</div>
                     <div class="badge">Locked</div>
                 </div>
+                <div class="card-action"></div>
             </div>
 
             <div class="card locked">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Vedic 2</div>
                     <div class="badge">Locked</div>
                 </div>
+                <div class="card-action"></div>
             </div>
 
             <div class="card locked">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Vedic 3</div>
                     <div class="badge">Locked</div>
                 </div>
+                <div class="card-action"></div>
             </div>
 
             <div class="card locked">
                 <div class="card-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </div>
                 <div class="card-content">
                     <div class="card-title">Vedic 4</div>
                     <div class="badge">Locked</div>
                 </div>
+                <div class="card-action"></div>
             </div>
 
         </div>
@@ -388,64 +486,6 @@
     </div>
 
 <script>
-    // Security & Access Variables
-    const ACCESS_PASSWORD = "kidzbraintest@app";
-    const EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-
-    // Initialize Auth state on load
-    window.onload = () => {
-        if (isAuthorized()) {
-            showDashboard();
-        } else {
-            showAuthScreen();
-        }
-    };
-
-    function isAuthorized() {
-        const expiry = localStorage.getItem('kidz_auth_expiry');
-        if (!expiry) return false;
-        
-        // Check if 7 days have passed
-        if (Date.now() > parseInt(expiry, 10)) {
-            localStorage.removeItem('kidz_auth_expiry');
-            return false;
-        }
-        return true;
-    }
-
-    function verifyPassword() {
-        const input = document.getElementById('passwordInput');
-        const errorText = document.getElementById('authError');
-        
-        if (input.value === ACCESS_PASSWORD) {
-            // Save current time + 7 days
-            localStorage.setItem('kidz_auth_expiry', Date.now() + EXPIRY_MS);
-            errorText.textContent = "";
-            input.value = "";
-            showDashboard();
-        } else {
-            errorText.textContent = "Incorrect password. Please try again.";
-            input.value = "";
-            input.focus();
-        }
-    }
-
-    function handleEnter(e) {
-        if (e.key === 'Enter') {
-            verifyPassword();
-        }
-    }
-
-    function showDashboard() {
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('levelsSection').style.display = 'block';
-    }
-
-    function showAuthScreen() {
-        document.getElementById('levelsSection').style.display = 'none';
-        document.getElementById('authSection').style.display = 'flex';
-    }
-
     function showNotification(message) {
         const notif = document.getElementById('notification');
         document.getElementById('notifText').textContent = message;
@@ -454,18 +494,14 @@
     }
 
     function selectLevel(level) {
-        // Double check authorization before loading a level
-        if (!isAuthorized()) {
-            alert("Your session has expired. Please enter the password again.");
-            showAuthScreen();
-            return;
-        }
-
         // Clear all persistent data to ensure a fresh test start
         sessionStorage.clear();
         localStorage.setItem("selectedLevel", level);
         
-        showNotification('Initializing Level ' + level + '...');
+        // Handle UI text differently for Beginner levels
+        let levelText = level.toString().startsWith('b') ? 'Beginner Level ' + level.toString().substring(1) : 'Level ' + level;
+        
+        showNotification('Initializing ' + levelText + '...');
         
         setTimeout(() => {
             window.location.href = "level" + level + ".html";
