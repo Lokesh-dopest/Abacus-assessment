@@ -185,16 +185,9 @@
             padding: 3px 8px;
             border-radius: 4px;
         }
-        .badge-mul {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #fde68a;
-        }
-        .badge-big {
-            background: #ede9fe;
-            color: #5b21b6;
-            border: 1px solid #ddd6fe;
-        }
+        .badge-mul { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-rows { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+        .badge-mix { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
         .opts {
             display: grid;
@@ -229,6 +222,7 @@
         .pagination {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 6px;
             margin: 32px 0;
         }
@@ -394,7 +388,7 @@
     <div class="header-right">
         <span class="header-stat"><strong class="timer-val" id="timer">10:00</strong></span>
         <span class="divider-dot"></span>
-        <span class="header-stat"><strong id="attempted">0</strong> / 250</span>
+        <span class="header-stat"><strong id="attempted">0</strong> / 225</span>
     </div>
 </header>
 
@@ -409,7 +403,6 @@
     <button class="submit-btn" onclick="handleSubmission()">Submit Test</button>
 </div>
 
-<!-- Back Warning -->
 <div class="overlay" id="backWarn">
     <div class="dialog warn-dialog">
         <div class="warn-icon">
@@ -427,7 +420,6 @@
     </div>
 </div>
 
-<!-- Result Modal -->
 <div class="overlay" id="resultModal">
     <div class="dialog result-dialog">
         <div class="result-top">
@@ -436,7 +428,7 @@
         </div>
 
         <div class="score-display">
-            <span class="score-big" id="scoreNum">0</span><span class="score-total"> / 250</span>
+            <span class="score-big" id="scoreNum">0</span><span class="score-total"> / 225</span>
             <div class="score-pct" id="scorePct">0%</div>
             <div class="grade-badge" id="gradeBadge">-</div>
         </div>
@@ -462,13 +454,13 @@
 
         <div class="result-footer">
             <button class="rf-secondary" onclick="retakeTest()">Retake</button>
-            <button class="rf-primary" onclick="location.href='index.html'">Back to Levels</button>
+            <button class="rf-primary" onclick="location.href='index.html'">Back to Dashboard</button>
         </div>
     </div>
 </div>
 
 <script>
-    const TOTAL    = 250;
+    const TOTAL    = 225; // 9 blocks of 25 questions
     const PER_PAGE = 25;
     const PAGES    = TOTAL / PER_PAGE;
 
@@ -491,17 +483,16 @@
     ];
     const getGrade = pct => GRADES.find(g => pct >= g.min);
 
-    /* ── Build unique-option list (4 options, all non-negative) ── */
+    /* ── Build unique-option list (4 options) ── */
     function buildOptions(correct, minVal, spread) {
         const opts = new Set([correct]);
         let attempts = 0;
         while (opts.size < 4 && attempts < 400) {
             attempts++;
-            const delta     = rand(-spread, spread);
+            const delta = rand(-spread, spread);
             const candidate = correct + delta;
             if (candidate >= minVal && candidate !== correct) opts.add(candidate);
         }
-        // fallback: add nearest integers not already included
         let offset = 1;
         while (opts.size < 4) {
             if (correct + offset >= minVal) opts.add(correct + offset);
@@ -512,117 +503,117 @@
     }
 
     /* ────────────────────────────────────────────────
-       TYPE 1 — Arithmetic  (1–99, length 3–5, no neg)
-       125 questions
+       Multiplication: Dynamic digits
     ──────────────────────────────────────────────── */
-    function makeArithmeticQ() {
-        while (true) {
-            const len = rand(3, 5);
-            let nums = [], ops = [];
-            let running = rand(1, 99);
-            nums.push(running);
-
-            for (let i = 1; i < len; i++) {
-                const op = Math.random() < 0.5 ? '+' : '-';
-                ops.push(op);
-                if (op === '-') {
-                    const maxSub = Math.min(running - 1, 99);
-                    if (maxSub < 1) { ops.pop(); break; }
-                    const n = rand(1, maxSub);
-                    nums.push(n);
-                    running -= n;
-                } else {
-                    const n = rand(1, 99);
-                    nums.push(n);
-                    running += n;
-                }
-            }
-
-            if (running < 0 || nums.length < 3) continue;
-            ops = ops.slice(0, nums.length - 1);
-
-            let text = String(nums[0]);
-            for (let i = 0; i < ops.length; i++) text += ` ${ops[i]} ${nums[i + 1]}`;
-
-            return {
-                text,
-                options: buildOptions(running, 0, 25),
-                correct: running,
-                type: 'arithmetic'
-            };
-        }
-    }
-
-    /* ────────────────────────────────────────────────
-       TYPE 2 — Multiplication tables (11–99 × 2–9)
-       100 questions
-    ──────────────────────────────────────────────── */
-    function makeMultiplicationQ() {
-        const a       = rand(11, 99);
-        const b       = rand(2, 9);
+    function makeMulQ(digitsA, digitsB) {
+        const minA = Math.pow(10, digitsA - 1);
+        const maxA = Math.pow(10, digitsA) - 1;
+        const minB = digitsB === 1 ? 2 : Math.pow(10, digitsB - 1);
+        const maxB = digitsB === 1 ? 9 : Math.pow(10, digitsB) - 1;
+        
+        const a = rand(minA, maxA);
+        const b = rand(minB, maxB);
         const correct = a * b;
-
+        
         return {
-            text:    `${a} × ${b}`,
-            options: buildOptions(correct, 1, 50),
+            text: `${a} × ${b}`,
+            options: buildOptions(correct, 10, 50),
             correct,
-            type: 'multiplication'
+            type: 'mul'
         };
     }
 
     /* ────────────────────────────────────────────────
-       TYPE 3 — Large numbers (101–999, 2-term +/−, no neg)
-       25 questions
+       Addition/Subtraction Rows (+/-)
+       Handles constraint: NO negative intermediate step
     ──────────────────────────────────────────────── */
-    function makeLargeNumQ() {
-        while (true) {
-            const a  = rand(101, 999);
-            const op = Math.random() < 0.5 ? '+' : '-';
+    function makeRowsQ(digits, rows, mix=false) {
+        let nums = [], ops = [];
+        
+        let minVal = mix ? 1 : (digits === 1 ? 1 : (digits === 3 ? 100 : 10));
+        let maxVal = mix ? 99 : (digits === 1 ? 9 : (digits === 3 ? 999 : 99));
 
-            let b, correct;
-            if (op === '+') {
-                b       = rand(101, 999);
-                correct = a + b;
-            } else {
-                // ensure result > 0
-                if (a <= 101) continue;
-                b       = rand(101, a - 1);
-                correct = a - b;
+        let running = rand(minVal, maxVal);
+        nums.push(running);
+
+        for (let i = 1; i < rows; i++) {
+            let op = Math.random() < 0.5 ? '+' : '-';
+            let nextNum;
+
+            if (op === '-' && running < minVal) {
+                op = '+';
             }
 
-            if (correct <= 0) continue;
+            if (op === '-') {
+                let currentMaxSub = Math.min(running, maxVal);
+                nextNum = rand(minVal, currentMaxSub);
+                running -= nextNum;
+            } else {
+                nextNum = rand(minVal, maxVal);
+                running += nextNum;
+            }
 
-            return {
-                text:    `${a} ${op} ${b}`,
-                options: buildOptions(correct, 1, 80),
-                correct,
-                type: 'largenum'
-            };
+            ops.push(op);
+            nums.push(nextNum);
         }
+
+        let text = String(nums[0]);
+        for (let i = 0; i < ops.length; i++) {
+            text += ` ${ops[i]} ${nums[i + 1]}`;
+        }
+
+        const spread = digits === 1 ? 15 : 100;
+
+        return {
+            text: text,
+            options: buildOptions(running, 0, spread),
+            correct: running,
+            type: mix ? 'mix' : 'rows'
+        };
     }
 
     /* ────────────────────────────────────────────────
-       Generate all 250 questions and shuffle
+       Generate all 225 questions following the logic blocks
     ──────────────────────────────────────────────── */
     function generateQuestions() {
         if (questions.length >= TOTAL) return;
 
         const pool = [];
 
-        // 125 arithmetic (1–99, 3–5 terms)
-        while (pool.length < 125) pool.push(makeArithmeticQ());
+        const appendShuffled = (block) => {
+            for (let i = block.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [block[i], block[j]] = [block[j], block[i]];
+            }
+            pool.push(...block);
+        };
 
-        // 100 multiplication (11–99 × 2–9)
-        while (pool.length < 225) pool.push(makeMultiplicationQ());
+        // 1. 25 ques: 2-digit multiply 1-digit
+        let b1 = []; for(let i=0; i<25; i++) b1.push(makeMulQ(2, 1)); appendShuffled(b1);
+        
+        // 2. 25 ques: 2-digit 3 rows (+ -)
+        let b2 = []; for(let i=0; i<25; i++) b2.push(makeRowsQ(2, 3)); appendShuffled(b2);
 
-        // 25 large number (101–999, 2-term)
-        while (pool.length < 250) pool.push(makeLargeNumQ());
+        // 3. 25 ques: mix 4 rows (+ -)
+        let b3 = []; for(let i=0; i<25; i++) b3.push(makeRowsQ(2, 4, true)); appendShuffled(b3);
 
-        // Fisher-Yates shuffle
-        for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
+        // 4. 25 ques: 2-digit multiply 1-digit
+        let b4 = []; for(let i=0; i<25; i++) b4.push(makeMulQ(2, 1)); appendShuffled(b4);
+
+        // 5. 25 ques: 3-digit 2 rows (+ -)
+        let b5 = []; for(let i=0; i<25; i++) b5.push(makeRowsQ(3, 2)); appendShuffled(b5);
+
+        // 6. 25 ques: 2-digit 4 rows (+ -)
+        let b6 = []; for(let i=0; i<25; i++) b6.push(makeRowsQ(2, 4)); appendShuffled(b6);
+
+        // 7. 25 ques: 2-digit multiply 1-digit
+        let b7 = []; for(let i=0; i<25; i++) b7.push(makeMulQ(2, 1)); appendShuffled(b7);
+
+        // 8. 25 ques: 1-digit 12 rows (+ -)
+        let b8 = []; for(let i=0; i<25; i++) b8.push(makeRowsQ(1, 12)); appendShuffled(b8);
+
+        // 9. 25 ques: mix 5 rows (+ -)
+        let b9 = []; for(let i=0; i<25; i++) b9.push(makeRowsQ(2, 5, true)); appendShuffled(b9);
 
         questions = pool;
         sessionStorage.setItem('l3_questions', JSON.stringify(questions));
@@ -638,18 +629,22 @@
         questions.slice(start, start + PER_PAGE).forEach((q, i) => {
             const idx   = start + i;
             let badge   = '';
-            if (q.type === 'multiplication') {
+            if (q.type === 'mul') {
                 badge = '<span class="q-badge badge-mul">× Table</span>';
-            } else if (q.type === 'largenum') {
-                badge = '<span class="q-badge badge-big">Large #</span>';
+            } else if (q.type === 'rows') {
+                badge = '<span class="q-badge badge-rows">Add/Sub</span>';
+            } else if (q.type === 'mix') {
+                badge = '<span class="q-badge badge-mix">Mixed</span>';
             }
+            
+            let displayQ = q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ');
 
             const card = document.createElement('div');
             card.className = 'q-card';
             card.innerHTML = `
                 <div class="q-top">
                     <div class="q-num">${idx + 1}</div>
-                    <div class="q-expr">${q.text} = ?</div>
+                    <div class="q-expr">${displayQ} = ?</div>
                     ${badge}
                 </div>
                 <div class="opts">

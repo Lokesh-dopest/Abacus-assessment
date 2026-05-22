@@ -174,6 +174,21 @@
             letter-spacing: 0.5px;
         }
 
+        /* Question type badges */
+        .q-badge {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .badge-mul { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-rows { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+        .badge-mix { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
         .opts {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -207,6 +222,7 @@
         .pagination {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 6px;
             margin: 32px 0;
         }
@@ -254,7 +270,7 @@
         }
         .submit-btn:hover { background: #1e3a8a; }
 
-        /* ═══ OVERLAY (shared) ═══ */
+        /* ═══ OVERLAY ═══ */
         .overlay {
             position: fixed;
             inset: 0;
@@ -277,34 +293,23 @@
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ═══ BACK WARNING DIALOG ═══ */
         .warn-dialog { max-width: 380px; padding: 28px 24px 24px; text-align: center; }
         .warn-dialog .warn-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--red-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--red-bg); display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 16px;
         }
         .warn-dialog .warn-icon svg { width: 20px; height: 20px; color: var(--red); }
         .warn-dialog h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-        .warn-dialog p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+        .warn-dialog p  { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
         .warn-actions { display: flex; gap: 8px; }
         .warn-actions button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.15s;
+            flex: 1; padding: 10px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
         }
         .btn-cancel { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
         .btn-cancel:hover { background: var(--border); }
@@ -313,116 +318,44 @@
 
         /* ═══ RESULT DIALOG ═══ */
         .result-dialog { max-width: 440px; overflow: hidden; }
-        .result-top {
-            padding: 28px 28px 0;
-            text-align: center;
-        }
-        .result-top h2 {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        .result-top .sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
+        .result-top { padding: 28px 28px 0; text-align: center; }
+        .result-top h2 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .result-top .sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-        .score-display {
-            text-align: center;
-            padding: 24px 0 16px;
-        }
-        .score-big {
-            font-size: 56px;
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1;
-        }
-        .score-total {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-        .score-pct {
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 4px;
-        }
+        .score-display { text-align: center; padding: 24px 0 16px; }
+        .score-big     { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .score-total   { font-size: 20px; font-weight: 600; color: var(--text-muted); }
+        .score-pct     { font-size: 13px; font-weight: 600; margin-top: 4px; }
 
         .result-bar-track {
-            height: 4px;
-            background: var(--border);
-            margin: 0 28px;
-            border-radius: 4px;
-            overflow: hidden;
+            height: 4px; background: var(--border);
+            margin: 0 28px; border-radius: 4px; overflow: hidden;
         }
-        .result-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.6s ease;
-        }
+        .result-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
 
         .result-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            margin: 20px 28px 0;
-            border-radius: 8px;
-            overflow: hidden;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1px; background: var(--border);
+            margin: 20px 28px 0; border-radius: 8px; overflow: hidden;
         }
-        .rs-item {
-            background: var(--surface);
-            padding: 14px 8px;
-            text-align: center;
-        }
-        .rs-val {
-            font-size: 20px;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .rs-lbl {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
+        .rs-item { background: var(--surface); padding: 14px 8px; text-align: center; }
+        .rs-val  { font-size: 20px; font-weight: 800; line-height: 1.2; }
+        .rs-lbl  { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
         .grade-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-top: 12px;
+            display: inline-block; padding: 3px 10px; border-radius: 4px;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+            text-transform: uppercase; margin-top: 12px;
         }
 
         .result-footer {
-            display: flex;
-            gap: 8px;
-            padding: 20px 28px 24px;
-            margin-top: 20px;
+            display: flex; gap: 8px; padding: 20px 28px 24px; margin-top: 20px;
         }
         .result-footer button {
-            flex: 1;
-            padding: 11px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.15s;
+            flex: 1; padding: 11px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
         }
-        .rf-secondary {
-            background: var(--bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border) !important;
-        }
+        .rf-secondary { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
         .rf-secondary:hover { background: var(--border); }
         .rf-primary { background: var(--brand); color: #fff; }
         .rf-primary:hover { background: #1e3a8a; }
@@ -442,7 +375,9 @@
 <header>
     <div class="header-left">
         <button class="back-btn" onclick="confirmBack()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+            </svg>
             Back
         </button>
         <div>
@@ -453,7 +388,7 @@
     <div class="header-right">
         <span class="header-stat"><strong class="timer-val" id="timer">10:00</strong></span>
         <span class="divider-dot"></span>
-        <span class="header-stat"><strong id="attempted">0</strong> / 250</span>
+        <span class="header-stat"><strong id="attempted">0</strong> / 200</span>
     </div>
 </header>
 
@@ -468,7 +403,6 @@
     <button class="submit-btn" onclick="handleSubmission()">Submit Test</button>
 </div>
 
-<!-- Back Warning -->
 <div class="overlay" id="backWarn">
     <div class="dialog warn-dialog">
         <div class="warn-icon">
@@ -486,7 +420,6 @@
     </div>
 </div>
 
-<!-- Result Modal -->
 <div class="overlay" id="resultModal">
     <div class="dialog result-dialog">
         <div class="result-top">
@@ -495,7 +428,7 @@
         </div>
 
         <div class="score-display">
-            <span class="score-big" id="scoreNum">0</span><span class="score-total" id="scoreTotal"> / 250</span>
+            <span class="score-big" id="scoreNum">0</span><span class="score-total"> / 200</span>
             <div class="score-pct" id="scorePct">0%</div>
             <div class="grade-badge" id="gradeBadge">-</div>
         </div>
@@ -521,105 +454,193 @@
 
         <div class="result-footer">
             <button class="rf-secondary" onclick="retakeTest()">Retake</button>
-            <button class="rf-primary" onclick="location.href='index.html'">Back to Levels</button>
+            <button class="rf-primary" onclick="location.href='index.html'">Back to Dashboard</button>
         </div>
     </div>
 </div>
 
 <script>
-    const TOTAL = 250;
+    const TOTAL    = 200; // 8 blocks of 25 questions
     const PER_PAGE = 25;
-    const PAGES = TOTAL / PER_PAGE;
-    let questions = JSON.parse(sessionStorage.getItem('l1_questions')) || [];
-    let answers = JSON.parse(sessionStorage.getItem('l1_answers')) || {};
-    let timeLeft = parseInt(sessionStorage.getItem('l1_time')) || 600;
+    const PAGES    = TOTAL / PER_PAGE;
+
+    let questions   = JSON.parse(sessionStorage.getItem('l1_questions')) || [];
+    let answers     = JSON.parse(sessionStorage.getItem('l1_answers'))   || {};
+    let timeLeft    = parseInt(sessionStorage.getItem('l1_time'))        || 600;
     let currentPage = 1;
     let timerInterval;
 
     const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
-    /* ── Grade Bands (deterministic) ── */
+    /* ── Grade Bands ── */
     const GRADES = [
-        { min: 95, grade: "A+", color: "#166534", bg: "#dcfce7", bar: "#16a34a" },
-        { min: 85, grade: "A",  color: "#155e75", bg: "#cffafe", bar: "#0891b2" },
-        { min: 70, grade: "B",  color: "#1e40af", bg: "#dbeafe", bar: "#3b82f6" },
-        { min: 55, grade: "C",  color: "#92400e", bg: "#fef3c7", bar: "#d97706" },
-        { min: 40, grade: "D",  color: "#9a3412", bg: "#ffedd5", bar: "#ea580c" },
-        { min: 0,  grade: "F",  color: "#991b1b", bg: "#fee2e2", bar: "#dc2626" }
+        { min: 95, grade: 'A+', color: '#166534', bg: '#dcfce7', bar: '#16a34a' },
+        { min: 85, grade: 'A',  color: '#155e75', bg: '#cffafe', bar: '#0891b2' },
+        { min: 70, grade: 'B',  color: '#1e40af', bg: '#dbeafe', bar: '#3b82f6' },
+        { min: 55, grade: 'C',  color: '#92400e', bg: '#fef3c7', bar: '#d97706' },
+        { min: 40, grade: 'D',  color: '#9a3412', bg: '#ffedd5', bar: '#ea580c' },
+        { min: 0,  grade: 'F',  color: '#991b1b', bg: '#fee2e2', bar: '#dc2626' }
     ];
+    const getGrade = pct => GRADES.find(g => pct >= g.min);
 
-    function getGrade(pct) {
-        return GRADES.find(g => pct >= g.min);
+    /* ── Build unique-option list (4 options) ── */
+    function buildOptions(correct, minVal, spread) {
+        const opts = new Set([correct]);
+        let attempts = 0;
+        while (opts.size < 4 && attempts < 400) {
+            attempts++;
+            const delta = rand(-spread, spread);
+            const candidate = correct + delta;
+            if (candidate >= minVal && candidate !== correct) opts.add(candidate);
+        }
+        let offset = 1;
+        while (opts.size < 4) {
+            if (correct + offset >= minVal) opts.add(correct + offset);
+            if (opts.size < 4 && correct - offset >= minVal) opts.add(correct - offset);
+            offset++;
+        }
+        return Array.from(opts).sort(() => Math.random() - 0.5);
     }
 
-    /* ── Generate Questions ── */
+    /* ────────────────────────────────────────────────
+       Multiplication: 1 to 10 Tables ONLY
+    ──────────────────────────────────────────────── */
+    function makeMulTableQ() {
+        const a = rand(1, 10);
+        const b = rand(1, 10);
+        const correct = a * b;
+        
+        return {
+            text: `${a} × ${b}`,
+            options: buildOptions(correct, 1, 20),
+            correct,
+            type: 'mul'
+        };
+    }
+
+    /* ────────────────────────────────────────────────
+       Addition/Subtraction Rows (+/-)
+       Handles constraint: NO negative intermediate step
+    ──────────────────────────────────────────────── */
+    function makeRowsQ(digits, rows, mix=false) {
+        let nums = [], ops = [];
+        let minVal = mix ? 1 : (digits === 3 ? 100 : 10);
+        let maxVal = mix ? 99 : (digits === 3 ? 999 : 99);
+
+        let running = rand(minVal, maxVal);
+        nums.push(running);
+
+        for (let i = 1; i < rows; i++) {
+            let op = Math.random() < 0.5 ? '+' : '-';
+            let nextNum;
+
+            if (op === '-' && running < minVal) {
+                op = '+';
+            }
+
+            if (op === '-') {
+                let currentMaxSub = Math.min(running, maxVal);
+                nextNum = rand(minVal, currentMaxSub);
+                running -= nextNum;
+            } else {
+                nextNum = rand(minVal, maxVal);
+                running += nextNum;
+            }
+
+            ops.push(op);
+            nums.push(nextNum);
+        }
+
+        let text = String(nums[0]);
+        for (let i = 0; i < ops.length; i++) {
+            text += ` ${ops[i]} ${nums[i + 1]}`;
+        }
+
+        return {
+            text: text,
+            options: buildOptions(running, 0, 100),
+            correct: running,
+            type: mix ? 'mix' : 'rows'
+        };
+    }
+
+    /* ────────────────────────────────────────────────
+       Generate all 200 questions following the logic blocks
+    ──────────────────────────────────────────────── */
     function generateQuestions() {
         if (questions.length >= TOTAL) return;
-        while (questions.length < TOTAL) {
-            const len = rand(3, 10);
-            let nums = [], ops = [];
-            let running = rand(10, 99);
-            nums.push(running);
 
-            for (let i = 1; i < len; i++) {
-                const op = Math.random() < 0.5 ? "+" : "-";
-                ops.push(op);
-                if (op === "-") {
-                    const max = Math.min(running - 1, 99);
-                    if (max < 1) break;
-                    const n = rand(1, max);
-                    nums.push(n);
-                    running -= n;
-                } else {
-                    const n = rand(1, 99);
-                    nums.push(n);
-                    running += n;
-                }
+        const pool = [];
+
+        const appendShuffled = (block) => {
+            for (let i = block.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [block[i], block[j]] = [block[j], block[i]];
             }
-            if (running < 0 || nums.length < 3) continue;
+            pool.push(...block);
+        };
 
-            // Trim ops to match nums (the inner loop can break early leaving extra ops)
-            ops = ops.slice(0, nums.length - 1);
+        // 1. 25 ques: 1 to 10 table only till 10 multiply
+        let b1 = []; for(let i=0; i<25; i++) b1.push(makeMulTableQ()); appendShuffled(b1);
+        
+        // 2. 25 ques: 2-digit 3 rows (+ -)
+        let b2 = []; for(let i=0; i<25; i++) b2.push(makeRowsQ(2, 3)); appendShuffled(b2);
 
-            let text = nums[0].toString();
-            for (let i = 0; i < ops.length; i++) text += ` ${ops[i]} ${nums[i + 1]}`;
+        // 3. 25 ques: 2-digit 4 rows (+ -)
+        let b3 = []; for(let i=0; i<25; i++) b3.push(makeRowsQ(2, 4)); appendShuffled(b3);
 
-            let opts = new Set([running]);
-            while (opts.size < 4) {
-                let f = running + rand(-15, 15);
-                if (f >= 0) opts.add(f);
-            }
+        // 4. 25 ques: Mix one digit and two digit 4 rows (+ -)
+        let b4 = []; for(let i=0; i<25; i++) b4.push(makeRowsQ(2, 4, true)); appendShuffled(b4);
 
-            questions.push({
-                text,
-                options: Array.from(opts).sort(() => Math.random() - 0.5),
-                correct: running
-            });
-        }
+        // 5. 25 ques: 2-digit 3 rows (+ -)
+        let b5 = []; for(let i=0; i<25; i++) b5.push(makeRowsQ(2, 3)); appendShuffled(b5);
+
+        // 6. 25 ques: 2-digit 5 rows (+ -)
+        let b6 = []; for(let i=0; i<25; i++) b6.push(makeRowsQ(2, 5)); appendShuffled(b6);
+
+        // 7. 25 ques: Mix one digit and two digit 6 rows (+ -)
+        let b7 = []; for(let i=0; i<25; i++) b7.push(makeRowsQ(2, 6, true)); appendShuffled(b7);
+
+        // 8. 25 ques: 2-digit 4 rows (+ -)
+        let b8 = []; for(let i=0; i<25; i++) b8.push(makeRowsQ(2, 4)); appendShuffled(b8);
+
+        questions = pool;
         sessionStorage.setItem('l1_questions', JSON.stringify(questions));
     }
 
     /* ── Render ── */
     function renderPage(page) {
         currentPage = page;
-        const el = document.getElementById("questions");
-        el.innerHTML = "";
+        const el    = document.getElementById('questions');
+        el.innerHTML = '';
         const start = (page - 1) * PER_PAGE;
 
         questions.slice(start, start + PER_PAGE).forEach((q, i) => {
-            const idx = start + i;
-            const card = document.createElement("div");
-            card.className = "q-card";
+            const idx   = start + i;
+            let badge   = '';
+            if (q.type === 'mul') {
+                badge = '<span class="q-badge badge-mul">Table</span>';
+            } else if (q.type === 'rows') {
+                badge = '<span class="q-badge badge-rows">Add/Sub</span>';
+            } else if (q.type === 'mix') {
+                badge = '<span class="q-badge badge-mix">Mixed</span>';
+            }
+            
+            let displayQ = q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ');
+
+            const card = document.createElement('div');
+            card.className = 'q-card';
             card.innerHTML = `
                 <div class="q-top">
                     <div class="q-num">${idx + 1}</div>
-                    <div class="q-expr">${q.text} = ?</div>
+                    <div class="q-expr">${displayQ} = ?</div>
+                    ${badge}
                 </div>
                 <div class="opts">
                     ${q.options.map(o => `
                         <button class="opt${answers[idx] === o ? ' selected' : ''}"
                                 onclick="pick(${idx},${o})">${o}</button>
-                    `).join("")}
+                    `).join('')}
                 </div>`;
             el.appendChild(card);
         });
@@ -629,15 +650,15 @@
     }
 
     function renderPagination() {
-        const nav = document.getElementById("pagination");
-        nav.innerHTML = "";
+        const nav = document.getElementById('pagination');
+        nav.innerHTML = '';
         for (let i = 1; i <= PAGES; i++) {
-            const s = (i - 1) * PER_PAGE;
+            const s    = (i - 1) * PER_PAGE;
             const done = questions.slice(s, s + PER_PAGE).some((_, j) => answers[s + j] != null);
-            const btn = document.createElement("button");
-            btn.className = `pg-btn${i === currentPage ? " active" : ""}${done ? " touched" : ""}`;
+            const btn  = document.createElement('button');
+            btn.className  = `pg-btn${i === currentPage ? ' active' : ''}${done ? ' touched' : ''}`;
             btn.textContent = i;
-            btn.onclick = () => { renderPage(i); scrollTo({ top: 0, behavior: "smooth" }); };
+            btn.onclick = () => { renderPage(i); scrollTo({ top: 0, behavior: 'smooth' }); };
             nav.appendChild(btn);
         }
     }
@@ -650,8 +671,8 @@
 
     function updateStats() {
         const n = Object.keys(answers).length;
-        document.getElementById("attempted").textContent = n;
-        document.getElementById("progressBar").style.width = (n / TOTAL * 100) + "%";
+        document.getElementById('attempted').textContent = n;
+        document.getElementById('progressBar').style.width = (n / TOTAL * 100) + '%';
     }
 
     /* ── Timer ── */
@@ -661,7 +682,7 @@
             sessionStorage.setItem('l1_time', timeLeft);
             const m = Math.floor(timeLeft / 60);
             const s = timeLeft % 60;
-            document.getElementById("timer").textContent = `${m}:${s < 10 ? "0" + s : s}`;
+            document.getElementById('timer').textContent = `${m}:${s < 10 ? '0' + s : s}`;
             if (timeLeft <= 0) handleSubmission();
         }, 1000);
     }
@@ -674,48 +695,43 @@
         questions.forEach((q, i) => { if (answers[i] === q.correct) correct++; });
 
         const attempted = Object.keys(answers).length;
-        const wrong = attempted - correct;
-        const skipped = TOTAL - attempted;
-        const pct = Math.round((correct / TOTAL) * 100);
-        const band = getGrade(pct);
+        const wrong     = attempted - correct;
+        const skipped   = TOTAL - attempted;
+        const pct       = Math.round((correct / TOTAL) * 100);
+        const band      = getGrade(pct);
 
-        document.getElementById("scoreNum").textContent = correct;
-        document.getElementById("scorePct").textContent = pct + "%";
-        document.getElementById("scorePct").style.color = band.color;
+        document.getElementById('scoreNum').textContent       = correct;
+        document.getElementById('scorePct').textContent       = pct + '%';
+        document.getElementById('scorePct').style.color       = band.color;
 
-        const badge = document.getElementById("gradeBadge");
-        badge.textContent = band.grade;
-        badge.style.background = band.bg;
-        badge.style.color = band.color;
+        const badge = document.getElementById('gradeBadge');
+        badge.textContent       = band.grade;
+        badge.style.background  = band.bg;
+        badge.style.color       = band.color;
 
-        const bar = document.getElementById("resultBar");
+        const bar = document.getElementById('resultBar');
         bar.style.background = band.bar;
-        setTimeout(() => { bar.style.width = pct + "%"; }, 50);
+        setTimeout(() => { bar.style.width = pct + '%'; }, 50);
 
-        document.getElementById("rsCorrect").textContent = correct;
-        document.getElementById("rsWrong").textContent = wrong;
-        document.getElementById("rsSkipped").textContent = skipped;
+        document.getElementById('rsCorrect').textContent = correct;
+        document.getElementById('rsWrong').textContent   = wrong;
+        document.getElementById('rsSkipped').textContent = skipped;
 
-        document.getElementById("resultModal").classList.add("open");
+        document.getElementById('resultModal').classList.add('open');
         sessionStorage.removeItem('l1_questions');
         sessionStorage.removeItem('l1_answers');
         sessionStorage.removeItem('l1_time');
     }
 
     /* ── Back Warning ── */
-    function confirmBack() {
-        document.getElementById("backWarn").classList.add("open");
-    }
-    function closeBackWarn() {
-        document.getElementById("backWarn").classList.remove("open");
-    }
+    function confirmBack() { document.getElementById('backWarn').classList.add('open'); }
+    function closeBackWarn() { document.getElementById('backWarn').classList.remove('open'); }
     function goBack() {
         sessionStorage.removeItem('l1_questions');
         sessionStorage.removeItem('l1_answers');
         sessionStorage.removeItem('l1_time');
         window.location.href = 'index.html';
     }
-
     function retakeTest() {
         sessionStorage.removeItem('l1_questions');
         sessionStorage.removeItem('l1_answers');
@@ -724,17 +740,9 @@
     }
 
     /* ── Init ── */
-    // Purge any cached questions that contain "undefined" from the old bug
-    if (questions.some(q => q.text.includes('undefined'))) {
-        questions = [];
-        answers = {};
-        sessionStorage.removeItem('l1_questions');
-        sessionStorage.removeItem('l1_answers');
-    }
     generateQuestions();
-    // Show restored timer immediately
     const im = Math.floor(timeLeft / 60), is = timeLeft % 60;
-    document.getElementById("timer").textContent = `${im}:${is < 10 ? "0" + is : is}`;
+    document.getElementById('timer').textContent = `${im}:${is < 10 ? '0' + is : is}`;
     renderPage(1);
     startTimer();
 </script>

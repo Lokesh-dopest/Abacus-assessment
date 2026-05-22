@@ -174,7 +174,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Multiplication badge on card */
+        /* Question type badges */
         .q-badge {
             margin-left: auto;
             flex-shrink: 0;
@@ -184,10 +184,10 @@
             text-transform: uppercase;
             padding: 3px 8px;
             border-radius: 4px;
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #fde68a;
         }
+        .badge-div { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-rows { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+        .badge-mix { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
         .opts {
             display: grid;
@@ -222,6 +222,7 @@
         .pagination {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 6px;
             margin: 32px 0;
         }
@@ -269,7 +270,7 @@
         }
         .submit-btn:hover { background: #1e3a8a; }
 
-        /* ═══ OVERLAY (shared) ═══ */
+        /* ═══ OVERLAY ═══ */
         .overlay {
             position: fixed;
             inset: 0;
@@ -292,34 +293,23 @@
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ═══ BACK WARNING DIALOG ═══ */
         .warn-dialog { max-width: 380px; padding: 28px 24px 24px; text-align: center; }
         .warn-dialog .warn-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--red-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--red-bg); display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 16px;
         }
         .warn-dialog .warn-icon svg { width: 20px; height: 20px; color: var(--red); }
         .warn-dialog h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-        .warn-dialog p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+        .warn-dialog p  { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
         .warn-actions { display: flex; gap: 8px; }
         .warn-actions button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.15s;
+            flex: 1; padding: 10px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
         }
         .btn-cancel { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
         .btn-cancel:hover { background: var(--border); }
@@ -328,116 +318,44 @@
 
         /* ═══ RESULT DIALOG ═══ */
         .result-dialog { max-width: 440px; overflow: hidden; }
-        .result-top {
-            padding: 28px 28px 0;
-            text-align: center;
-        }
-        .result-top h2 {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        .result-top .sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
+        .result-top { padding: 28px 28px 0; text-align: center; }
+        .result-top h2 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .result-top .sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-        .score-display {
-            text-align: center;
-            padding: 24px 0 16px;
-        }
-        .score-big {
-            font-size: 56px;
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1;
-        }
-        .score-total {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-        .score-pct {
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 4px;
-        }
+        .score-display { text-align: center; padding: 24px 0 16px; }
+        .score-big     { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .score-total   { font-size: 20px; font-weight: 600; color: var(--text-muted); }
+        .score-pct     { font-size: 13px; font-weight: 600; margin-top: 4px; }
 
         .result-bar-track {
-            height: 4px;
-            background: var(--border);
-            margin: 0 28px;
-            border-radius: 4px;
-            overflow: hidden;
+            height: 4px; background: var(--border);
+            margin: 0 28px; border-radius: 4px; overflow: hidden;
         }
-        .result-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.6s ease;
-        }
+        .result-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
 
         .result-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            margin: 20px 28px 0;
-            border-radius: 8px;
-            overflow: hidden;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1px; background: var(--border);
+            margin: 20px 28px 0; border-radius: 8px; overflow: hidden;
         }
-        .rs-item {
-            background: var(--surface);
-            padding: 14px 8px;
-            text-align: center;
-        }
-        .rs-val {
-            font-size: 20px;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .rs-lbl {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
+        .rs-item { background: var(--surface); padding: 14px 8px; text-align: center; }
+        .rs-val  { font-size: 20px; font-weight: 800; line-height: 1.2; }
+        .rs-lbl  { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
         .grade-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-top: 12px;
+            display: inline-block; padding: 3px 10px; border-radius: 4px;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+            text-transform: uppercase; margin-top: 12px;
         }
 
         .result-footer {
-            display: flex;
-            gap: 8px;
-            padding: 20px 28px 24px;
-            margin-top: 20px;
+            display: flex; gap: 8px; padding: 20px 28px 24px; margin-top: 20px;
         }
         .result-footer button {
-            flex: 1;
-            padding: 11px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.15s;
+            flex: 1; padding: 11px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
         }
-        .rf-secondary {
-            background: var(--bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border) !important;
-        }
+        .rf-secondary { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
         .rf-secondary:hover { background: var(--border); }
         .rf-primary { background: var(--brand); color: #fff; }
         .rf-primary:hover { background: #1e3a8a; }
@@ -457,7 +375,9 @@
 <header>
     <div class="header-left">
         <button class="back-btn" onclick="confirmBack()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+            </svg>
             Back
         </button>
         <div>
@@ -468,7 +388,7 @@
     <div class="header-right">
         <span class="header-stat"><strong class="timer-val" id="timer">10:00</strong></span>
         <span class="divider-dot"></span>
-        <span class="header-stat"><strong id="attempted">0</strong> / 250</span>
+        <span class="header-stat"><strong id="attempted">0</strong> / 225</span>
     </div>
 </header>
 
@@ -483,7 +403,6 @@
     <button class="submit-btn" onclick="handleSubmission()">Submit Test</button>
 </div>
 
-<!-- Back Warning -->
 <div class="overlay" id="backWarn">
     <div class="dialog warn-dialog">
         <div class="warn-icon">
@@ -501,7 +420,6 @@
     </div>
 </div>
 
-<!-- Result Modal -->
 <div class="overlay" id="resultModal">
     <div class="dialog result-dialog">
         <div class="result-top">
@@ -510,7 +428,7 @@
         </div>
 
         <div class="score-display">
-            <span class="score-big" id="scoreNum">0</span><span class="score-total" id="scoreTotal"> / 250</span>
+            <span class="score-big" id="scoreNum">0</span><span class="score-total"> / 225</span>
             <div class="score-pct" id="scorePct">0%</div>
             <div class="grade-badge" id="gradeBadge">-</div>
         </div>
@@ -536,18 +454,19 @@
 
         <div class="result-footer">
             <button class="rf-secondary" onclick="retakeTest()">Retake</button>
-            <button class="rf-primary" onclick="location.href='index.html'">Back to Levels</button>
+            <button class="rf-primary" onclick="location.href='index.html'">Back to Dashboard</button>
         </div>
     </div>
 </div>
 
 <script>
-    const TOTAL = 250;
+    const TOTAL    = 225; // 9 blocks of 25 questions
     const PER_PAGE = 25;
-    const PAGES = TOTAL / PER_PAGE;
-    let questions = JSON.parse(sessionStorage.getItem('l2_questions')) || [];
-    let answers   = JSON.parse(sessionStorage.getItem('l2_answers'))   || {};
-    let timeLeft  = parseInt(sessionStorage.getItem('l2_time'))        || 600;
+    const PAGES    = TOTAL / PER_PAGE;
+
+    let questions   = JSON.parse(sessionStorage.getItem('l2_questions')) || [];
+    let answers     = JSON.parse(sessionStorage.getItem('l2_answers'))   || {};
+    let timeLeft    = parseInt(sessionStorage.getItem('l2_time'))        || 600;
     let currentPage = 1;
     let timerInterval;
 
@@ -555,127 +474,145 @@
 
     /* ── Grade Bands ── */
     const GRADES = [
-        { min: 95, grade: "A+", color: "#166534", bg: "#dcfce7", bar: "#16a34a" },
-        { min: 85, grade: "A",  color: "#155e75", bg: "#cffafe", bar: "#0891b2" },
-        { min: 70, grade: "B",  color: "#1e40af", bg: "#dbeafe", bar: "#3b82f6" },
-        { min: 55, grade: "C",  color: "#92400e", bg: "#fef3c7", bar: "#d97706" },
-        { min: 40, grade: "D",  color: "#9a3412", bg: "#ffedd5", bar: "#ea580c" },
-        { min: 0,  grade: "F",  color: "#991b1b", bg: "#fee2e2", bar: "#dc2626" }
+        { min: 95, grade: 'A+', color: '#166534', bg: '#dcfce7', bar: '#16a34a' },
+        { min: 85, grade: 'A',  color: '#155e75', bg: '#cffafe', bar: '#0891b2' },
+        { min: 70, grade: 'B',  color: '#1e40af', bg: '#dbeafe', bar: '#3b82f6' },
+        { min: 55, grade: 'C',  color: '#92400e', bg: '#fef3c7', bar: '#d97706' },
+        { min: 40, grade: 'D',  color: '#9a3412', bg: '#ffedd5', bar: '#ea580c' },
+        { min: 0,  grade: 'F',  color: '#991b1b', bg: '#fee2e2', bar: '#dc2626' }
     ];
+    const getGrade = pct => GRADES.find(g => pct >= g.min);
 
-    function getGrade(pct) {
-        return GRADES.find(g => pct >= g.min);
-    }
-
-    /* ── Generate a single arithmetic question (3–4 numbers, 1–99, no negative intermediate) ── */
-    function makeArithmeticQ() {
-        while (true) {
-            const len = rand(3, 4);           // 3 or 4 numbers in the expression
-            let nums = [], ops = [];
-            let running = rand(1, 99);
-            nums.push(running);
-
-            for (let i = 1; i < len; i++) {
-                const op = Math.random() < 0.5 ? '+' : '-';
-                ops.push(op);
-                if (op === '-') {
-                    const maxSub = Math.min(running - 1, 99);
-                    if (maxSub < 1) { ops.pop(); break; }
-                    const n = rand(1, maxSub);
-                    nums.push(n);
-                    running -= n;
-                } else {
-                    const n = rand(1, 99);
-                    nums.push(n);
-                    running += n;
-                }
-            }
-
-            // Need at least 3 numbers and result must be non-negative
-            if (running < 0 || nums.length < 3) continue;
-
-            ops = ops.slice(0, nums.length - 1);
-
-            let text = String(nums[0]);
-            for (let i = 0; i < ops.length; i++) text += ` ${ops[i]} ${nums[i + 1]}`;
-
-            // Build 4 unique non-negative options
-            let opts = new Set([running]);
-            let attempts = 0;
-            while (opts.size < 4 && attempts < 200) {
-                attempts++;
-                const delta = rand(-20, 20);
-                const candidate = running + delta;
-                if (candidate >= 0 && candidate !== running) opts.add(candidate);
-            }
-            // Fallback: fill with nearby values if still short
-            let offset = 1;
-            while (opts.size < 4) {
-                if (running + offset >= 0) opts.add(running + offset);
-                if (opts.size < 4 && running - offset >= 0) opts.add(running - offset);
-                offset++;
-            }
-
-            return {
-                text,
-                options: Array.from(opts).sort(() => Math.random() - 0.5),
-                correct: running,
-                type: 'arithmetic'
-            };
-        }
-    }
-
-    /* ── Generate a single multiplication table question (2–9 × 1–10) ── */
-    function makeMultiplicationQ() {
-        const a = rand(2, 9);
-        const b = rand(2, 9);
-        const correct = a * b;
-
-        let opts = new Set([correct]);
+    /* ── Build unique-option list (4 options) ── */
+    function buildOptions(correct, minVal, spread) {
+        const opts = new Set([correct]);
         let attempts = 0;
-        while (opts.size < 4 && attempts < 200) {
+        while (opts.size < 4 && attempts < 400) {
             attempts++;
-            const delta = rand(-15, 15);
+            const delta = rand(-spread, spread);
             const candidate = correct + delta;
-            if (candidate > 0 && candidate !== correct) opts.add(candidate);
+            if (candidate >= minVal && candidate !== correct) opts.add(candidate);
         }
-        // Fallback fill
         let offset = 1;
         while (opts.size < 4) {
-            if (correct + offset > 0) opts.add(correct + offset);
-            if (opts.size < 4 && correct - offset > 0) opts.add(correct - offset);
+            if (correct + offset >= minVal) opts.add(correct + offset);
+            if (opts.size < 4 && correct - offset >= minVal) opts.add(correct - offset);
             offset++;
         }
+        return Array.from(opts).sort(() => Math.random() - 0.5);
+    }
 
+    /* ────────────────────────────────────────────────
+       Division: 2-digit ÷ 1-digit = 1-digit ans
+    ──────────────────────────────────────────────── */
+    function makeDiv2by1Q() {
+        let d = rand(2, 9);
+        let q = rand(2, 9);
+        while (d * q < 10) {
+            d = rand(2, 9);
+            q = rand(2, 9);
+        }
+        const dividend = d * q;
         return {
-            text: `${a} × ${b}`,
-            options: Array.from(opts).sort(() => Math.random() - 0.5),
-            correct,
-            type: 'multiplication'
+            text: `${dividend} ÷ ${d}`,
+            options: buildOptions(q, 1, 8),
+            correct: q,
+            type: 'div'
         };
     }
 
-    /* ── Generate all 250 questions: 200 arithmetic + 50 multiplication, randomly shuffled ── */
+    /* ────────────────────────────────────────────────
+       Addition/Subtraction Rows (+/-)
+       Handles constraint: NO negative intermediate step
+    ──────────────────────────────────────────────── */
+    function makeRowsQ(digits, rows, mix=false) {
+        let nums = [], ops = [];
+        
+        // Define ranges based on digits and mix flag
+        let minVal = mix ? 1 : (digits === 1 ? 1 : (digits === 3 ? 100 : 10));
+        let maxVal = mix ? 99 : (digits === 1 ? 9 : (digits === 3 ? 999 : 99));
+
+        let running = rand(minVal, maxVal);
+        nums.push(running);
+
+        for (let i = 1; i < rows; i++) {
+            let op = Math.random() < 0.5 ? '+' : '-';
+            let nextNum;
+
+            if (op === '-' && running < minVal) {
+                op = '+';
+            }
+
+            if (op === '-') {
+                let currentMaxSub = Math.min(running, maxVal);
+                nextNum = rand(minVal, currentMaxSub);
+                running -= nextNum;
+            } else {
+                nextNum = rand(minVal, maxVal);
+                running += nextNum;
+            }
+
+            ops.push(op);
+            nums.push(nextNum);
+        }
+
+        let text = String(nums[0]);
+        for (let i = 0; i < ops.length; i++) {
+            text += ` ${ops[i]} ${nums[i + 1]}`;
+        }
+
+        const spread = digits === 1 ? 15 : 100;
+
+        return {
+            text: text,
+            options: buildOptions(running, 0, spread),
+            correct: running,
+            type: mix ? 'mix' : 'rows'
+        };
+    }
+
+    /* ────────────────────────────────────────────────
+       Generate all 225 questions following the logic blocks
+    ──────────────────────────────────────────────── */
     function generateQuestions() {
         if (questions.length >= TOTAL) return;
 
         const pool = [];
 
-        // 200 arithmetic questions
-        while (pool.length < 200) {
-            pool.push(makeArithmeticQ());
-        }
+        const appendShuffled = (block) => {
+            for (let i = block.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [block[i], block[j]] = [block[j], block[i]];
+            }
+            pool.push(...block);
+        };
 
-        // 50 multiplication table questions
-        while (pool.length < 250) {
-            pool.push(makeMultiplicationQ());
-        }
+        // 1. 25 ques: 1 digit 6 rows (+ -)
+        let b1 = []; for(let i=0; i<25; i++) b1.push(makeRowsQ(1, 6)); appendShuffled(b1);
+        
+        // 2. 25 ques: 2 digit divides 1 digit to get 1 digit ans
+        let b2 = []; for(let i=0; i<25; i++) b2.push(makeDiv2by1Q()); appendShuffled(b2);
 
-        // Shuffle all 250 together (Fisher-Yates)
-        for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
-        }
+        // 3. 25 ques: 2 digit 3 rows (+ -)
+        let b3 = []; for(let i=0; i<25; i++) b3.push(makeRowsQ(2, 3)); appendShuffled(b3);
+
+        // 4. 25 ques: mix 4 rows (+ -)
+        let b4 = []; for(let i=0; i<25; i++) b4.push(makeRowsQ(2, 4, true)); appendShuffled(b4);
+
+        // 5. 25 ques: 1 digit 10 rows (+ -)
+        let b5 = []; for(let i=0; i<25; i++) b5.push(makeRowsQ(1, 10)); appendShuffled(b5);
+
+        // 6. 25 ques: 2 digit 4 rows (+ -)
+        let b6 = []; for(let i=0; i<25; i++) b6.push(makeRowsQ(2, 4)); appendShuffled(b6);
+
+        // 7. 25 ques: mix 4 rows (+ -)
+        let b7 = []; for(let i=0; i<25; i++) b7.push(makeRowsQ(2, 4, true)); appendShuffled(b7);
+
+        // 8. 25 ques: 2 digit 3 rows (+ -)
+        let b8 = []; for(let i=0; i<25; i++) b8.push(makeRowsQ(2, 3)); appendShuffled(b8);
+
+        // 9. 25 ques: 2 digit 5 rows (+ -)
+        let b9 = []; for(let i=0; i<25; i++) b9.push(makeRowsQ(2, 5)); appendShuffled(b9);
 
         questions = pool;
         sessionStorage.setItem('l2_questions', JSON.stringify(questions));
@@ -684,20 +621,30 @@
     /* ── Render ── */
     function renderPage(page) {
         currentPage = page;
-        const el = document.getElementById('questions');
+        const el    = document.getElementById('questions');
         el.innerHTML = '';
         const start = (page - 1) * PER_PAGE;
 
         questions.slice(start, start + PER_PAGE).forEach((q, i) => {
-            const idx = start + i;
-            const isMul = q.type === 'multiplication';
+            const idx   = start + i;
+            let badge   = '';
+            if (q.type === 'div') {
+                badge = '<span class="q-badge badge-div">÷ Divide</span>';
+            } else if (q.type === 'rows') {
+                badge = '<span class="q-badge badge-rows">Add/Sub</span>';
+            } else if (q.type === 'mix') {
+                badge = '<span class="q-badge badge-mix">Mixed</span>';
+            }
+            
+            let displayQ = q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ');
+
             const card = document.createElement('div');
             card.className = 'q-card';
             card.innerHTML = `
                 <div class="q-top">
                     <div class="q-num">${idx + 1}</div>
-                    <div class="q-expr">${q.text} = ?</div>
-                    ${isMul ? '<span class="q-badge">×&nbsp;Table</span>' : ''}
+                    <div class="q-expr">${displayQ} = ?</div>
+                    ${badge}
                 </div>
                 <div class="opts">
                     ${q.options.map(o => `
@@ -716,10 +663,10 @@
         const nav = document.getElementById('pagination');
         nav.innerHTML = '';
         for (let i = 1; i <= PAGES; i++) {
-            const s = (i - 1) * PER_PAGE;
+            const s    = (i - 1) * PER_PAGE;
             const done = questions.slice(s, s + PER_PAGE).some((_, j) => answers[s + j] != null);
-            const btn = document.createElement('button');
-            btn.className = `pg-btn${i === currentPage ? ' active' : ''}${done ? ' touched' : ''}`;
+            const btn  = document.createElement('button');
+            btn.className  = `pg-btn${i === currentPage ? ' active' : ''}${done ? ' touched' : ''}`;
             btn.textContent = i;
             btn.onclick = () => { renderPage(i); scrollTo({ top: 0, behavior: 'smooth' }); };
             nav.appendChild(btn);
@@ -758,19 +705,19 @@
         questions.forEach((q, i) => { if (answers[i] === q.correct) correct++; });
 
         const attempted = Object.keys(answers).length;
-        const wrong   = attempted - correct;
-        const skipped = TOTAL - attempted;
-        const pct     = Math.round((correct / TOTAL) * 100);
-        const band    = getGrade(pct);
+        const wrong     = attempted - correct;
+        const skipped   = TOTAL - attempted;
+        const pct       = Math.round((correct / TOTAL) * 100);
+        const band      = getGrade(pct);
 
-        document.getElementById('scoreNum').textContent = correct;
-        document.getElementById('scorePct').textContent = pct + '%';
-        document.getElementById('scorePct').style.color = band.color;
+        document.getElementById('scoreNum').textContent       = correct;
+        document.getElementById('scorePct').textContent       = pct + '%';
+        document.getElementById('scorePct').style.color       = band.color;
 
         const badge = document.getElementById('gradeBadge');
-        badge.textContent  = band.grade;
-        badge.style.background = band.bg;
-        badge.style.color  = band.color;
+        badge.textContent       = band.grade;
+        badge.style.background  = band.bg;
+        badge.style.color       = band.color;
 
         const bar = document.getElementById('resultBar');
         bar.style.background = band.bar;
@@ -787,19 +734,14 @@
     }
 
     /* ── Back Warning ── */
-    function confirmBack() {
-        document.getElementById('backWarn').classList.add('open');
-    }
-    function closeBackWarn() {
-        document.getElementById('backWarn').classList.remove('open');
-    }
+    function confirmBack() { document.getElementById('backWarn').classList.add('open'); }
+    function closeBackWarn() { document.getElementById('backWarn').classList.remove('open'); }
     function goBack() {
         sessionStorage.removeItem('l2_questions');
         sessionStorage.removeItem('l2_answers');
         sessionStorage.removeItem('l2_time');
         window.location.href = 'index.html';
     }
-
     function retakeTest() {
         sessionStorage.removeItem('l2_questions');
         sessionStorage.removeItem('l2_answers');
