@@ -55,10 +55,10 @@
         .q-badge { margin-left: auto; flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
         .badge-add { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
         .badge-mul { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-div { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
         .badge-sq { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
-        .badge-alg { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
         .badge-vd { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
-        .badge-cp { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .badge-cp { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
 
         .opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
         .opt {
@@ -133,7 +133,7 @@
     <div class="header-right">
         <span class="header-stat"><strong class="timer-val" id="timer">10:00</strong></span>
         <span class="divider-dot"></span>
-        <span class="header-stat"><strong id="attempted">0</strong> / 220</span>
+        <span class="header-stat"><strong id="attempted">0</strong> / 257</span>
     </div>
 </header>
 
@@ -159,10 +159,10 @@
 <div class="overlay" id="resultModal">
     <div class="dialog result-dialog">
         <div class="result-top">
-            <h2>Test Complete</h2><span class="sub" style="font-size:12px; color:var(--text-muted)">Beginner Vedic 1 Assessment</span>
+            <h2>Test Complete</h2><span class="sub" style="font-size:12px; color:var(--text-muted)">Beginner Vedic 1</span>
         </div>
         <div class="score-display">
-            <span class="score-big" id="scoreNum">0</span><span style="font-size:20px; font-weight:600; color:var(--text-muted)"> / 220</span>
+            <span class="score-big" id="scoreNum">0</span><span style="font-size:20px; font-weight:600; color:var(--text-muted)"> / 257</span>
             <div style="font-size:13px; font-weight:600; margin-top:4px;" id="scorePct">0%</div>
             <div class="grade-badge" id="gradeBadge">-</div>
         </div>
@@ -180,8 +180,8 @@
 </div>
 
 <script>
-    const TOTAL    = 220; 
-    const PER_PAGE = 20;
+    const TOTAL    = 257; 
+    const PER_PAGE = 25;
     const PAGES    = Math.ceil(TOTAL / PER_PAGE);
 
     let questions   = JSON.parse(sessionStorage.getItem('bv1_questions')) || [];
@@ -224,11 +224,42 @@
     }
 
     /* ── GENERATORS ── */
-    function makeAddQ(digitsA, digitsB) {
-        const a = rand(Math.pow(10, digitsA-1), Math.pow(10, digitsA)-1);
-        const b = rand(Math.pow(10, digitsB-1), Math.pow(10, digitsB)-1);
-        const correct = (a + b).toString();
-        return { text: `${a} + ${b}`, options: buildOptions(correct, 50), correct, type: 'add' };
+    function makeAddSubRowsQ(layoutArr, isSub = false) {
+        let nums = [];
+        let running = 0;
+        let text = "";
+        
+        for (let i = 0; i < layoutArr.length; i++) {
+            let digits = layoutArr[i];
+            let num = rand(Math.pow(10, digits-1), Math.pow(10, digits)-1);
+            
+            if (i === 0) {
+                running = num;
+                text = num.toString();
+            } else {
+                let op = isSub ? '-' : '+';
+                if (isSub) {
+                    if (running < num) num = rand(Math.pow(10, digits-1), Math.min(running, Math.pow(10, digits)-1));
+                    if (running < Math.pow(10, digits-1)) op = '+'; // Fallback to addition if sub is impossible
+                }
+                
+                running = op === '+' ? running + num : running - num;
+                text += ` ${op} ${num}`;
+            }
+        }
+        return { text: text, options: buildOptions(running.toString(), 30), correct: running.toString(), type: 'add' };
+    }
+
+    function makeFixedPatternAddSubQ() {
+        // Specifically for "2 digit + 2 digit - 2 digit"
+        const a = rand(10, 99);
+        const b = rand(10, 99);
+        let running = a + b;
+        let c = rand(10, Math.min(running, 99)); // Ensure it can be subtracted
+        running -= c;
+        
+        const text = `${a} + ${b} - ${c}`;
+        return { text: text, options: buildOptions(running.toString(), 20), correct: running.toString(), type: 'add' };
     }
 
     function makeMulQ(digitsA, digitsB) {
@@ -253,32 +284,10 @@
     }
     
     function makeMulEnd1Q(digitsA) {
-        let aBase = digitsA === 2 ? rand(1, 9) : rand(10, 99);
-        let a = aBase * 10 + 1;
-        let bBase = rand(1, 9);
-        let b = bBase * 10 + 1;
-        const correct = (BigInt(a) * BigInt(b)).toString();
-        return { text: `${a} × ${b}`, options: buildOptions(correct, 150), correct, type: 'vd' };
-    }
-
-    function makeSqSumQ() {
-        const a = rand(10, 99);
-        const b = rand(10, 99);
-        const correct = (a*a + b*b).toString();
-        return { text: `${a}² + ${b}²`, options: buildOptions(correct, 400), correct, type: 'sq' };
-    }
-
-    function makeSqQ(digitsA) {
-        const a = rand(Math.pow(10, digitsA-1), Math.pow(10, digitsA)-1);
-        const correct = (BigInt(a) * BigInt(a)).toString();
-        return { text: `${a}²`, options: buildOptions(correct, 150), correct, type: 'sq' };
-    }
-
-    function makeMulSumQ() {
-        const a = rand(10, 99); const b = rand(2, 9);
-        const c = rand(10, 99); const d = rand(2, 9);
-        const correct = (a*b + c*d).toString();
-        return { text: `(${a} × ${b}) + (${c} × ${d})`, options: buildOptions(correct, 100), correct, type: 'add' };
+        let a = rand(Math.pow(10, digitsA-1), Math.pow(10, digitsA)-1);
+        let bStr = rand(1, 9) + "1";
+        const correct = (BigInt(a) * BigInt(bStr)).toString();
+        return { text: `${a} × ${bStr}`, options: buildOptions(correct, 150), correct, type: 'vd' };
     }
 
     function makeSeries9SqQ() {
@@ -296,63 +305,34 @@
         return { text: `${a} × ${bStr}`, options: buildOptions(correct, 500), correct, type: 'vd' };
     }
 
-    function makeAlgebraSqQ() {
-        const a = rand(1, 9);
-        const b = rand(1, 9);
-        const isTwoVar = Math.random() < 0.5;
-        let aStr = a === 1 ? "" : a;
-        let text = isTwoVar ? `(${aStr}x + ${b}y)²` : `(${aStr}x + ${b})²`;
-        let correct = isTwoVar ? `${a*a===1?"":a*a}x² + ${2*a*b}xy + ${b*b}y²` : `${a*a===1?"":a*a}x² + ${2*a*b}x + ${b*b}`;
-        
-        let opts = new Set([correct]);
-        while(opts.size < 4) {
-            let fakeA = a + rand(-2, 2); if(fakeA<1) fakeA=1;
-            let fakeB = b + rand(-2, 2); if(fakeB<1) fakeB=1;
-            let fakeMid = 2*fakeA*fakeB + rand(-4, 4);
-            let fAStr = fakeA*fakeA===1 ? "" : fakeA*fakeA;
-            let fakeOpt = isTwoVar ? `${fAStr}x² + ${fakeMid}xy + ${fakeB*fakeB}y²` : `${fAStr}x² + ${fakeMid}x + ${fakeB*fakeB}`;
-            if(fakeOpt !== correct) opts.add(fakeOpt);
-        }
-        return { text, options: Array.from(opts).sort(() => Math.random() - 0.5), correct, type: 'alg' };
-    }
-
     function make10_0XSqQ() {
         const len = rand(1, 4);
-        let lastDigit = rand(1, 10);
-        let valStr = "1" + "0".repeat(len) + lastDigit;
+        const valStr = "1" + "0".repeat(len) + rand(1, 9);
         const correct = (BigInt(valStr) ** 2n).toString();
         return { text: `${valStr}²`, options: buildOptions(correct, 300), correct, type: 'sq' };
     }
 
     function makeBaseSubQ() {
-        const p = rand(3, 7);
+        const p = rand(3, 6);
         const base = Math.pow(10, p);
         const num = rand(Math.pow(10, p-2), base - 1);
         const correct = (base - num).toString();
         return { text: `${base} - ${num}`, options: buildOptions(correct, 80), correct, type: 'vd' };
     }
 
-    function makeDuplexQ(digits) {
-        const val = digits === 2 ? rand(10, 99) : rand(100, 999);
+    function makeDuplexQ() {
+        const val = rand(10, 99);
         const s = val.toString();
-        let correct;
-        if(digits === 2) {
-            correct = (2 * parseInt(s[0]) * parseInt(s[1])).toString();
-        } else {
-            correct = (2 * parseInt(s[0]) * parseInt(s[2]) + Math.pow(parseInt(s[1]), 2)).toString();
-        }
+        const correct = (2 * parseInt(s[0]) * parseInt(s[1])).toString();
         return { text: `D(${val})`, options: buildOptions(correct, 30), correct, type: 'vd' };
     }
 
-    function makeComplementQ(digits) {
-        let numStr = "";
-        for(let i=0; i<digits; i++) numStr += rand(i===0?1:0, 9).toString();
-        if(Math.random() < 0.3) numStr = numStr.slice(0, -1) + "0";
-        if(Math.random() < 0.1) numStr = numStr.slice(0, -2) + "00";
-        
-        let num = parseInt(numStr);
-        const correct = (Math.pow(10, digits) - num).toString();
-        return { text: `Complement of ${numStr}`, options: buildOptions(correct, 100), correct, type: 'cp' };
+    function makeComplementQ() {
+        let str = rand(100000, 999999).toString();
+        if(Math.random() < 0.3) str = str.substring(0, 5) + "0";
+        if(Math.random() < 0.1) str = str.substring(0, 4) + "00";
+        const correct = (1000000 - parseInt(str)).toString();
+        return { text: `Complement of ${str}`, options: buildOptions(correct, 100), correct, type: 'cp' };
     }
 
     function makeRangeMulQ(min1, max1, min2, max2) {
@@ -362,15 +342,38 @@
         return { text: `${a} × ${b}`, options: buildOptions(correct, 50), correct, type: 'vd' };
     }
 
-    function makeZeroMidMulQ(zeros) {
-        const aStr = rand(1,9) + "0".repeat(zeros) + rand(1,9);
-        const bStr = rand(1,9) + "0".repeat(zeros) + rand(1,9);
-        const correct = (BigInt(aStr) * BigInt(bStr)).toString();
-        return { text: `${aStr} × ${bStr}`, options: buildOptions(correct, 250), correct, type: 'vd' };
+    function makeSubQ(digitsA, digitsB) {
+        const a = rand(Math.pow(10, digitsA-1), Math.pow(10, digitsA)-1);
+        const b = rand(Math.pow(10, digitsB-1), Math.pow(10, digitsB)-1);
+        const big = Math.max(a, b);
+        const small = Math.min(a, b);
+        const correct = (big - small).toString();
+        return { text: `${big} - ${small}`, options: buildOptions(correct, 50), correct, type: 'add' };
+    }
+
+    function makeDivExactQ(digitsD, divisor) {
+        let qMin = Math.ceil(Math.pow(10, digitsD-1) / divisor);
+        let qMax = Math.floor((Math.pow(10, digitsD)-1) / divisor);
+        let q = rand(qMin, qMax);
+        let dividend = q * divisor;
+        return { text: `${dividend} ÷ ${divisor}`, options: buildOptions(q.toString(), 20), correct: q.toString(), type: 'div' };
+    }
+
+    function makeSqEnd5Q() {
+        const base = rand(1, 9);
+        const val = base * 10 + 5;
+        const correct = (val * val).toString();
+        return { text: `${val}²`, options: buildOptions(correct, 50), correct, type: 'sq' };
+    }
+
+    function makeSq50Q() {
+        const val = rand(51, 59);
+        const correct = (val * val).toString();
+        return { text: `${val}²`, options: buildOptions(correct, 20), correct, type: 'sq' };
     }
 
     /* ────────────────────────────────────────────────
-       Generate all 220 questions mapped perfectly to user spec
+       Generate all 257 questions mapped perfectly to user spec
     ──────────────────────────────────────────────── */
     function generateQuestions() {
         if (questions.length >= TOTAL) return;
@@ -385,45 +388,52 @@
         };
 
         let b;
+        // Addition & Subtraction blocks
+        b=[]; for(let i=0;i<10;i++) b.push(makeAddSubRowsQ([2,2])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeAddSubRowsQ([3,2])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeAddSubRowsQ([3,3])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeAddSubRowsQ([2,2,2])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeAddSubRowsQ([2,1,2])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeFixedPatternAddSubQ()); appendShuffled(b); // Fixed to strictly A+B-C
         
-        b=[]; for(let i=0;i<5;i++) b.push(makeAddQ(2,2)); appendShuffled(b);
-        b=[]; for(let i=0;i<5;i++) b.push(makeAddQ(3,2)); appendShuffled(b);
-        b=[]; for(let i=0;i<5;i++) b.push(makeAddQ(3,3)); appendShuffled(b);
-        
+        // Basic Multiply
         b=[]; for(let i=0;i<10;i++) b.push(makeMulQ(2,1)); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeMulQ(3,1)); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeMulQ(4,1)); appendShuffled(b);
         b=[]; for(let i=0;i<10;i++) b.push(makeMulQ(2,2)); appendShuffled(b);
 
-        let sp1 = [5, 50, 500]; b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(3, [sp1[i%3]])); appendShuffled(b);
-        let sp2 = [125, 25, 250]; b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(4, [sp2[i%3]])); appendShuffled(b);
+        // Fixed/Vedic Multiply
+        let sf1 = [5, 50]; b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(3, [sf1[i%2]])); appendShuffled(b);
+        let sf2 = [125, 25]; b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(4, [sf2[i%2]])); appendShuffled(b);
+        b=[]; for(let i=0;i<6;i++) b.push(makeMulFixedQ(6, [101])); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(4, [11])); appendShuffled(b);
+
+        // Series 9s
+        b=[]; for(let i=0;i<5;i++) b.push(makeSeries9SqQ()); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeMulNinesQ(4, 4)); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeMulNinesQ(4, 6)); appendShuffled(b);
         
-        b=[]; for(let i=0;i<10;i++) b.push(makeMulFixedQ(6, [101])); appendShuffled(b);
-        b=[]; for(let i=0;i<10;i++) b.push(makeMulRangeQ(4, 11, 19)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<5;i++) b.push(makeSqSumQ()); appendShuffled(b);
-        b=[]; for(let i=0;i<10;i++) b.push(makeSqQ(2)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<8;i++) b.push(makeMulSumQ()); appendShuffled(b);
-        b=[]; for(let i=0;i<8;i++) b.push(makeSeries9SqQ()); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<8;i++) b.push(makeMulNinesQ(4, 4)); appendShuffled(b);
-        b=[]; for(let i=0;i<8;i++) b.push(makeMulNinesQ(4, 6)); appendShuffled(b);
-        b=[]; for(let i=0;i<8;i++) b.push(makeMulNinesQ(4, 2)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<8;i++) b.push(makeAlgebraSqQ()); appendShuffled(b);
-        b=[]; for(let i=0;i<8;i++) b.push(make10_0XSqQ()); appendShuffled(b);
+        b=[]; for(let i=0;i<6;i++) b.push(make10_0XSqQ()); appendShuffled(b);
         b=[]; for(let i=0;i<10;i++) b.push(makeBaseSubQ()); appendShuffled(b);
+        b=[]; for(let i=0;i<6;i++) b.push(makeDuplexQ()); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeComplementQ()); appendShuffled(b);
         
-        b=[]; for(let i=0;i<8;i++) b.push(makeDuplexQ(2)); appendShuffled(b);
-        b=[]; for(let i=0;i<8;i++) b.push(makeDuplexQ(3)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<10;i++) b.push(makeComplementQ(6)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<7;i++) b.push(makeRangeMulQ(91, 99, 91, 99)); appendShuffled(b);
-        b=[]; for(let i=0;i<7;i++) b.push(makeRangeMulQ(101, 110, 101, 110)); appendShuffled(b);
-        
-        b=[]; for(let i=0;i<7;i++) b.push(makeZeroMidMulQ(1)); appendShuffled(b);
-        b=[]; for(let i=0;i<7;i++) b.push(makeZeroMidMulQ(2)); appendShuffled(b);
-        
+        // Range multiplies
+        b=[]; for(let i=0;i<10;i++) b.push(makeRangeMulQ(91, 99, 91, 99)); appendShuffled(b);
+        b=[]; for(let i=0;i<10;i++) b.push(makeRangeMulQ(101, 110, 101, 110)); appendShuffled(b);
+
+        // Subtractions
+        b=[]; for(let i=0;i<5;i++) b.push(makeSubQ(3, 3)); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeSubQ(2, 2)); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeSubQ(3, 2)); appendShuffled(b);
+
+        // Divisions
+        b=[]; for(let i=0;i<5;i++) b.push(makeDivExactQ(2, rand(2,9))); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeDivExactQ(3, rand(2,9))); appendShuffled(b);
+
+        // Special Squares & Mul
+        b=[]; for(let i=0;i<5;i++) b.push(makeSqEnd5Q()); appendShuffled(b);
+        b=[]; for(let i=0;i<5;i++) b.push(makeSq50Q()); appendShuffled(b);
         b=[]; for(let i=0;i<5;i++) b.push(makeMulEnd1Q(2)); appendShuffled(b);
         b=[]; for(let i=0;i<5;i++) b.push(makeMulEnd1Q(3)); appendShuffled(b);
 
@@ -444,14 +454,14 @@
             let badge   = '';
             if (q.type === 'add') badge = '<span class="q-badge badge-add">Add/Sub</span>';
             else if (q.type === 'mul') badge = '<span class="q-badge badge-mul">Multiply</span>';
+            else if (q.type === 'div') badge = '<span class="q-badge badge-div">Divide</span>';
             else if (q.type === 'sq') badge = '<span class="q-badge badge-sq">Square</span>';
-            else if (q.type === 'alg') badge = '<span class="q-badge badge-alg">Algebra</span>';
             else if (q.type === 'cp') badge = '<span class="q-badge badge-cp">Complement</span>';
             else if (q.type === 'vd') badge = '<span class="q-badge badge-vd">Vedic</span>';
 
             const card = document.createElement('div');
             card.className = 'q-card';
-            let displayQ = q.type !== 'alg' ? q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ') : q.text;
+            let displayQ = q.text.replace(/\+/g, ' + ').replace(/\-/g, ' - ');
 
             card.innerHTML = `
                 <div class="q-top">
