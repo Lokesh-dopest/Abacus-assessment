@@ -120,19 +120,16 @@
 
 <div class="overlay" id="resultModal">
     <div class="dialog result-dialog">
-        <div style="background: #f8fafc; padding: 20px 28px; border-bottom: 1px solid var(--border); text-align: left; border-radius: 14px 14px 0 0;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <h2 style="font-size: 18px; font-weight: 800; color: var(--brand); margin-bottom: 4px;" id="certName">Student Name</h2>
-                    <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary);" id="certCenter">Center Name</div>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Submission Time</div>
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text-primary);" id="certTime">00:00:00</div>
-                </div>
+        <div class="result-top"><h2>Test Complete</h2><span class="sub">Vedic Level 3 Assessment</span></div>
+        <div style="background: var(--bg); margin: 16px 28px 0; padding: 12px 16px; border-radius: 8px; font-size: 12px; color: var(--text-secondary); border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span><strong>Name:</strong> <span id="resName"></span></span>
+                <span><strong>Branch:</strong> <span id="resBranch"></span></span>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-hover); font-weight: 500;">
+                <span id="resDateTime"></span>
             </div>
         </div>
-        <div class="result-top"><h2>Test Complete</h2><span class="sub">Vedic Level 3 Assessment</span></div>
         <div class="score-display">
             <span class="score-big" id="scoreNum">0</span><span style="font-size:20px; font-weight:600; color:var(--text-muted)"> / <span id="resTotalDisplay">251</span></span>
             <div style="font-size:13px; font-weight:600; margin-top:4px;" id="scorePct">0%</div>
@@ -546,16 +543,25 @@
     /* ── Submit ── */
     function handleSubmission() {
         clearInterval(timerInterval);
-        const studentName = sessionStorage.getItem('student_name') || "Guest Student";
-        const centerName = sessionStorage.getItem('student_center') || "Unknown Center";
+        // Retrieve details from session
+        const sName = sessionStorage.getItem("studentName") || "Unknown";
+        const sBranch = sessionStorage.getItem("studentBranch") || "Unknown";
         
-        const now = new Date();
-        const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        
-        document.getElementById('certName').textContent = studentName;
-        document.getElementById('certCenter').textContent = centerName;
-        document.getElementById('certTime').innerHTML = `${now.toLocaleDateString('en-US', dateOptions)}<br/>${now.toLocaleTimeString('en-US', timeOptions)}`;
+        // Generate current IST Date & Time
+        const istDateTime = new Date().toLocaleString("en-IN", { 
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium", 
+            timeStyle: "medium" 
+        });
+
+        // Inject into DOM
+        document.getElementById('resName').textContent = sName;
+        document.getElementById('resBranch').textContent = sBranch;
+        document.getElementById('resDateTime').textContent = istDateTime + " (IST)";
+
+        // Clear details so they vanish if the user navigates away directly
+        sessionStorage.removeItem("studentName");
+        sessionStorage.removeItem("studentBranch");
 
         if(document.getElementById('resTotalDisplay')) document.getElementById('resTotalDisplay').textContent = TOTAL;
         

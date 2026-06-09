@@ -427,6 +427,15 @@
             <h2>Test Complete</h2>
             <span class="sub">Level 7 Assessment</span>
         </div>
+        <div style="background: var(--bg); margin: 16px 28px 0; padding: 12px 16px; border-radius: 8px; font-size: 12px; color: var(--text-secondary); border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span><strong>Name:</strong> <span id="resName"></span></span>
+                <span><strong>Branch:</strong> <span id="resBranch"></span></span>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-hover); font-weight: 500;">
+                <span id="resDateTime"></span>
+            </div>
+        </div>
 
         <div class="score-display">
             <span class="score-big" id="scoreNum">0</span><span class="score-total"> / 225</span>
@@ -832,6 +841,25 @@
         document.getElementById('rsCorrect').textContent = correct;
         document.getElementById('rsWrong').textContent   = wrong;
         document.getElementById('rsSkipped').textContent = skipped;
+        // Retrieve details from session
+        const sName = sessionStorage.getItem("studentName") || "Unknown";
+        const sBranch = sessionStorage.getItem("studentBranch") || "Unknown";
+        
+        // Generate current IST Date & Time
+        const istDateTime = new Date().toLocaleString("en-IN", { 
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium", 
+            timeStyle: "medium" 
+        });
+
+        // Inject into DOM
+        document.getElementById('resName').textContent = sName;
+        document.getElementById('resBranch').textContent = sBranch;
+        document.getElementById('resDateTime').textContent = istDateTime + " (IST)";
+
+        // Clear details so they vanish if the user navigates away directly
+        sessionStorage.removeItem("studentName");
+        sessionStorage.removeItem("studentBranch");
 
         document.getElementById('resultModal').classList.add('open');
         sessionStorage.removeItem('l7_questions');

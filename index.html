@@ -472,6 +472,18 @@
 
         </div>
     </div>
+    <div class="overlay" id="studentModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px);">
+        <div style="background: var(--surface); padding: 24px; border-radius: 12px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px;">
+            <h3 style="margin: 0 0 8px 0; font-size: 18px;">Enter Details</h3>
+            <input type="text" id="studentName" placeholder="Student Name" style="padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-family: inherit; font-size: 14px;">
+            <input type="text" id="studentBranch" placeholder="Branch Name" style="padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-family: inherit; font-size: 14px;">
+            
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button onclick="closeModal()" style="flex: 1; padding: 10px; border: 1px solid var(--border-light); background: transparent; border-radius: 8px; cursor: pointer; font-weight: 600;">Cancel</button>
+                <button onclick="startLevel()" style="flex: 1; padding: 10px; border: none; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; font-weight: 600;">Start Test</button>
+            </div>
+        </div>
+    </div>
 
     <div class="notification" id="notification">
         <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -488,23 +500,48 @@
         setTimeout(() => notif.classList.remove('show'), 2000);
     }
 
+    let pendingLevel = null;
+
     function selectLevel(level) {
-        sessionStorage.clear();
-        localStorage.setItem("selectedLevel", level);
+        pendingLevel = level;
+        document.getElementById('studentModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('studentModal').style.display = 'none';
+        document.getElementById('studentName').value = '';
+        document.getElementById('studentBranch').value = '';
+    }
+
+    function startLevel() {
+        const name = document.getElementById('studentName').value.trim();
+        const branch = document.getElementById('studentBranch').value.trim();
+        
+        if (!name || !branch) {
+            alert("Please enter both Name and Branch to proceed.");
+            return;
+        }
+
+        closeModal();
+        sessionStorage.clear(); // This ensures old test data vanishes
+        
+        sessionStorage.setItem("selectedLevel", pendingLevel);
+        sessionStorage.setItem("studentName", name);
+        sessionStorage.setItem("studentBranch", branch);
         
         let levelText;
-        if (level.toString().startsWith('b')) {
-            levelText = 'Beginner Level ' + level.toString().substring(1);
-        } else if (level.toString().startsWith('v')) {
-            levelText = 'Vedic ' + level.toString().substring(1);
+        if (pendingLevel.toString().startsWith('b')) {
+            levelText = 'Beginner Level ' + pendingLevel.toString().substring(1);
+        } else if (pendingLevel.toString().startsWith('v')) {
+            levelText = 'Vedic ' + pendingLevel.toString().substring(1);
         } else {
-            levelText = 'Level ' + level;
+            levelText = 'Level ' + pendingLevel;
         }
         
         showNotification('Initializing ' + levelText + '...');
         
         setTimeout(() => {
-            window.location.href = "level" + level + ".html";
+            window.location.href = "level" + pendingLevel + ".html";
         }, 600);
     }
 </script>
